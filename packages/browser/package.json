@@ -1,6 +1,6 @@
 {
   "name": "@doras/browser",
-  "version": "0.0.1",
+  "version": "0.0.2-alpha.6+85a1fc3",
   "license": "MIT",
   "main": "dist/main.js",
   "module": "dist/module.js",
@@ -17,7 +17,19 @@
     "types/**/*"
   ],
   "dependencies": {
-    "@doras/core": "0.0.1",
+    "@doras/core": "^0.0.2-alpha.6+85a1fc3",
     "web-vitals": "^1.1.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nanzm/dora.git"
+  },
+  "keywords": [],
+  "description": "",
+  "author": "nanzm",
+  "bugs": {
+    "url": "https://github.com/nanzm/dora/issues"
+  },
+  "homepage": "https://github.com/nanzm/dora#readme",
+  "gitHead": "85a1fc36f4daab6015471c9719da0ff3b546c659"
 }
