@@ -1,5 +1,5 @@
 {
-  "name": "dora",
+  "name": "root",
   "private": true,
   "workspaces": {
     "packages": [
