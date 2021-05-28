@@ -4,6 +4,7 @@ node_modules
 .idea
 .vscode
 
+coverage
 dist
 dist-ssr
 build

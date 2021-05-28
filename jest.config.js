@@ -1,4 +1,3 @@
-
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 
@@ -12,9 +11,9 @@ module.exports = {
   coveragePathIgnorePatterns: ["/node_modules/"],
 
   // Allows you to use a custom runner instead of Jest's default test runner
-  // runner: "jest-runner",
-  runner: "jest-electron/runner",
-  testEnvironment: "jest-electron/environment",
+  runner: "jest-runner",
+  // runner: "jest-electron/runner",
+  // testEnvironment: "jest-electron/environment",
 
   // The glob patterns Jest uses to detect test files
   transform: {
@@ -25,6 +24,5 @@ module.exports = {
     //   "**/__tests__/**/*.[jt]s?(x)",
     //   "**/?(*.)+(spec|test).[tj]s?(x)"
     "**/?(*.)+(spec|test).ts"
-  ],
-
+  ]
 };

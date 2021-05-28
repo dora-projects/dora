@@ -1,1 +1,2 @@
-export * from "./plugin";
+export * from "./plugins/error";
+export * from "./plugins/performance";

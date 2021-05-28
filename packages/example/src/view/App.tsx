@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <div className="App">
       <h1>hello world</h1>
+      <button
+        onClick={() => {
+          const obj = JSON.parse("");
+          console.log(obj.name.b.c);
+        }}
+      >
+        按钮
+      </button>
     </div>
   );
 }

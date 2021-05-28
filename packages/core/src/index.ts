@@ -1,7 +1,5 @@
-import { executorInit, executorBeforeSend, logger } from "./helper";
-
-export * from "./plugin";
-export * from "./helper";
+import { executorInit, executorBeforeSend } from "./helper";
+import { logger } from "./logger";
 
 class Dora {
   pluginHooks: {
@@ -26,7 +24,7 @@ class Dora {
       (acc, plugin) => {
         const { name, init, onEventBeforeSend, onEventAfterSend } = plugin;
 
-        logger.info(`${name} has install`);
+        logger().debug(`${name} has install`);
 
         //name
         name && acc.pluginNames.push(name);
@@ -67,7 +65,7 @@ class Dora {
   }
 
   async report(pluginName, originEvent) {
-    logger.log(`received ${pluginName} report data: `, originEvent);
+    logger().debug(`received ${pluginName} report data: `, originEvent);
 
     const event = await executorBeforeSend(this.pluginHooks.onEventBeforeSend, originEvent);
     console.log(event);
@@ -79,3 +77,5 @@ export default {
     return new Dora(conf);
   }
 };
+
+export * from "./logger";
