@@ -98,11 +98,13 @@ function config({ location, pkgJson }) {
           {
             file: path.join(location, pkgJson.module),
             format: "es",
-            sourcemap: true
+            sourcemap: true,
+            exports: "auto"
           },
           {
             file: path.join(location, pkgJson.main),
-            format: "commonjs"
+            format: "commonjs",
+            exports: "auto"
           }
         ],
         plugins

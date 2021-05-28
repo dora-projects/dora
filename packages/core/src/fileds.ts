@@ -3,9 +3,11 @@ import { LEVEL } from "./logger";
 export interface InitConfig {
   appId: string;
   appVersion: string;
-  logLevel: LEVEL;
-  sampleRate: number;
-  userId: string;
+  logLevel?: LEVEL;
+  sampleRate?: number;
+  userId?: string;
+  transfer?: (data) => Promise<any>;
+  plugins?: any[];
 }
 
 export interface AppField {
