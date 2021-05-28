@@ -1,5 +1,6 @@
 import { executorInit, executorBeforeSend } from "./helper";
-import { logger } from "./logger";
+import { logger, LEVEL } from "./logger";
+import { InitConfig } from "./fileds";
 
 class Dora {
   pluginHooks: {
@@ -73,8 +74,8 @@ class Dora {
 }
 
 export default {
-  init: (conf) => {
-    return new Dora(conf);
+  init: (config: InitConfig) => {
+    return new Dora(config);
   }
 };
 
