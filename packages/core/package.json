@@ -1,0 +1,16 @@
+{
+  "name": "@doras/core",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "browser": "dist/browser.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "b:types": "tsc"
+  },
+  "files": [
+    "dist/**/*",
+    "types/**/*"
+  ]
+}

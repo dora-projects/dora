@@ -9,20 +9,16 @@ export const LogPlugin = (conf?) => {
       }, 1000);
     },
     onEventBeforeSend: (event) => {
-    throw new Error("dasdasd")
+      return event;
     },
-    onEventSendAfter: (event, res) => {
-    },
+    onEventSendAfter: (event, res) => {}
   };
 };
 
 export const ErrorPlugin = (conf?) => {
   return {
     name: "dora-error-plugin",
-    init: ({ report }) => {
-
-    },
-    onEventBeforeSend: (event) => {
-    },
+    init: ({ report }) => {},
+    onEventBeforeSend: (event) => {}
   };
 };

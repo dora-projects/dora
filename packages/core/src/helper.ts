@@ -1,21 +1,17 @@
-const prefix = 'Dora';
+const prefix = "Dora";
 
 export const logger = {
   log: console.log.bind(console, `%c ${prefix}`, `font-size:16px`),
   info: console.info.bind(console, `%c ${prefix}`, `font-size:16px`),
   warn: console.warn.bind(console, `%c ${prefix}`, `font-size:16px`),
-  error: console.error.bind(console, `%c ${prefix}`, `font-size:16px`),
+  error: console.error.bind(console, `%c ${prefix}`, `font-size:16px`)
 };
 
 export const noopLogger = {
-  log: () => {
-  },
-  info: () => {
-  },
-  warn: () => {
-  },
-  error: () => {
-  },
+  log: () => {},
+  info: () => {},
+  warn: () => {},
+  error: () => {}
 };
 
 export const executorInit = (funcArray, client) => {
@@ -38,6 +34,7 @@ export const executorBeforeSend = async (funcArray, originEvent) => {
       const result = await func.call(null, acc);
       logger.info(`${func.pluginName} beforeSend hook executed, got result: `, result);
       acc = result;
+
       if (!result) {
         logger.warn(`${func.pluginName} beforeSend get false result, so break！！！ `, result);
         break;
@@ -49,8 +46,5 @@ export const executorBeforeSend = async (funcArray, originEvent) => {
     }
   }
 
-
   return acc;
 };
-
-
