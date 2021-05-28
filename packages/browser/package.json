@@ -6,6 +6,9 @@
   "module": "dist/module.js",
   "browser": "dist/browser.js",
   "types": "types/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "b:types": "tsc"
   },
