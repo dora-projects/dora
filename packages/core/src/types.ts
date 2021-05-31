@@ -43,13 +43,13 @@ export interface PerfField {
 }
 
 // 网络
-export interface NetworkField {
-  netType: string;
-  netUrl: string;
-  netMethod: string;
-  netStatus: string;
-  netRequest: string;
-  netResponse: string;
+export interface ApiField {
+  apiType: string;
+  apiUrl: string;
+  apiMethod: string;
+  apiStatus: string;
+  apiRequest: string;
+  apiResponse: string;
 }
 
 // 错误
@@ -66,3 +66,23 @@ export interface EventField {
   eventLabel: string;
   eventValue: string;
 }
+
+export interface StatArgs {
+  category: string;
+  action: string;
+  label: string;
+  value: string;
+}
+
+export interface BaseClient {
+  use: (plugins: PluginType[]) => void;
+  statistic: (data: StatArgs) => void;
+  report: (pluginName: string, data: any) => void;
+}
+
+export type PluginType = () => {
+  name: string;
+  init: (args: { report: (data: any) => void }) => void;
+  onEventBeforeSend: (any) => any;
+  onEventSendAfter: (any) => void;
+};

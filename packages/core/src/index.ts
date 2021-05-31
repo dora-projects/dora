@@ -1,3 +1,3 @@
 export { logger } from "./logger";
-export * from "./fileds";
+export * from "./types";
 export { Client } from "./client";

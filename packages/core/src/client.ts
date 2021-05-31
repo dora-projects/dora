@@ -1,8 +1,8 @@
 import { logger } from "./logger";
-import { InitConfig } from "./fileds";
+import { InitConfig, StatArgs, BaseClient } from "./types";
 import { executorBeforeSend, executorInit } from "./helper";
 
-export class Client {
+export class Client implements BaseClient {
   appId: string;
   appName: string;
   appVersion: string;
@@ -70,6 +70,10 @@ export class Client {
 
     // 执行 init
     executorInit(result.pluginInits, client);
+  }
+
+  statistic(data: StatArgs) {
+    console.log(data);
   }
 
   async report(pluginName, originEvent) {
