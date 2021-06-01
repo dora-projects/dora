@@ -1,9 +1,10 @@
 import Dora, { WebVitalsPlugin, ErrorPlugin } from "@doras/browser";
 
 Dora.init({
+  appEnv: "",
+  serverUrl: "",
   appId: "",
-  appVersion: "",
-  plugins: [WebVitalsPlugin(), ErrorPlugin()]
+  appVersion: ""
 });
 
 import React from "react";

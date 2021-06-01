@@ -1,9 +1,10 @@
+import { Plugin } from "@doras/core";
 import { getLCP, getFID, getCLS } from "web-vitals";
 
-export const WebVitalsPlugin = (conf?) => {
+export const WebVitalsPlugin = (conf): Plugin => {
   return {
     name: "@doras/browser-web-vitals-plugin",
-    init: ({ report }) => {
+    setup: ({ report }) => {
       getCLS(sendToAnalytics);
       getFID(sendToAnalytics);
       getLCP(sendToAnalytics);
@@ -15,6 +16,6 @@ export const WebVitalsPlugin = (conf?) => {
     onEventBeforeSend: (event) => {
       return event;
     },
-    onEventSendAfter: (event, res) => {}
+    onEventSendAfter: () => {}
   };
 };

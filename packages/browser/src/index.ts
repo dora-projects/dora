@@ -1,20 +1,19 @@
-import { logger, Client, InitConfig, StatArgs, BaseClient } from "@doras/core";
-
-export * from "./plugins/error";
-export * from "./plugins/performance";
-
-type BrowserInitConfig = InitConfig & {};
+import { logger, Client, StatArgs } from "@doras/core";
+import { verifyBrowserConfig } from "./config";
+import { BrowserConfig } from "./types";
 
 const Browser = {
   logger,
   _client: null as Client,
-  init: (config: BrowserInitConfig) => {
+  init: (config: BrowserConfig) => {
     if (Browser._client) {
       Browser.logger().warn("init has been called.");
       return Browser._client;
     }
 
-    Browser._client = new Client(config);
+    const conf = verifyBrowserConfig(config);
+    Browser._client = new Client(conf);
+
     return Browser._client;
   },
   stat: (data: StatArgs) => {
@@ -26,4 +25,7 @@ const Browser = {
   }
 };
 
-export default BrowserStater;
+export default Browser;
+
+export * from "./plugins/error";
+export * from "./plugins/performance";

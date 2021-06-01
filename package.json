@@ -17,7 +17,7 @@
     "test": "jest",
     "test-cov": "jest --coverage",
     "ci": "lerna bootstrap && npm run build && npm run b:types && npm run test-cov",
-    "lint": "eslint packages/*/src --ext .ts",
+    "lint": "eslint --fix",
     "changelog": "node tools/gen-changelog.js"
   },
   "repository": {

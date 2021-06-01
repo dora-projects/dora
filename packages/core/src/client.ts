@@ -1,21 +1,20 @@
 import { logger } from "./logger";
-import { InitConfig, StatArgs, BaseClient } from "./types";
-import { executorBeforeSend, executorInit } from "./helper";
+import { BaseConfig, StatArgs, BaseClient, userData } from "./types";
+import { executorBeforeSend, executorSetups } from "./helper";
 
 export class Client implements BaseClient {
-  appId: string;
-  appName: string;
-  appVersion: string;
-  sampleRate: number;
-
-  transfer: (data) => Promise<any>;
-
-  pluginHooks: {
+  private appId: string;
+  private appName: string;
+  private appVersion: string;
+  private sampleRate: number;
+  private user: userData;
+  private transfer: (data) => Promise<any>;
+  private pluginHooks: {
     onEventBeforeSend: any[];
     onEventSendAfter: any[];
   };
 
-  constructor(conf: InitConfig) {
+  constructor(conf: BaseConfig) {
     this.pluginHooks = {
       onEventBeforeSend: [],
       onEventSendAfter: []
@@ -30,17 +29,17 @@ export class Client implements BaseClient {
     const client = this;
     const result = plugins.reduce(
       (acc, plugin) => {
-        const { name, init, onEventBeforeSend, onEventAfterSend } = plugin;
+        const { name, setup, onEventBeforeSend, onEventAfterSend } = plugin;
 
         logger().debug(`${name} has install`);
 
         //name
         name && acc.pluginNames.push(name);
 
-        // init
-        if (init) {
-          init.pluginName = name;
-          acc.pluginInits.push(init);
+        // setup
+        if (setup) {
+          setup.pluginName = name;
+          acc.pluginSetups.push(setup);
         }
 
         // hooks
@@ -57,7 +56,7 @@ export class Client implements BaseClient {
       },
       {
         pluginNames: [],
-        pluginInits: [],
+        pluginSetups: [],
         pluginHooks: {
           onEventBeforeSend: [],
           onEventAfterSend: []
@@ -68,8 +67,8 @@ export class Client implements BaseClient {
     // hook
     this.pluginHooks = result.pluginHooks;
 
-    // 执行 init
-    executorInit(result.pluginInits, client);
+    // 执行 setups
+    executorSetups(result.pluginSetups, client);
   }
 
   statistic(data: StatArgs) {
@@ -81,5 +80,16 @@ export class Client implements BaseClient {
 
     const event = await executorBeforeSend(this.pluginHooks.onEventBeforeSend, originEvent);
     console.log(event);
+  }
+
+  setUser(uid: string, data?: { [key: string]: any }) {
+    this.user.uid = uid;
+    if (data) {
+      this.user.data = data;
+    }
+  }
+
+  getUser(): userData {
+    return this.user;
   }
 }

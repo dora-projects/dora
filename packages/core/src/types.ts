@@ -1,14 +1,20 @@
-import { LEVEL } from "./logger";
-
-export interface InitConfig {
-  appId: string;
-  appVersion: string;
-  logLevel?: LEVEL;
-  sampleRate?: number;
-  userId?: string;
-  transfer?: (data) => Promise<any>;
-  plugins?: any[];
+export interface Data {
+  [key: string]: any;
 }
+
+export interface BaseConfig {
+  serverUrl: string;
+  appId: string;
+  appEnv: string;
+  appVersion: string;
+  user?: userData;
+  userStore?: () => userData;
+  sampleRate?: number;
+  transfer?: (mode: string, url: string, data: Data) => Promise<any>;
+  plugins?: Plugin[];
+}
+
+export type Transport = (mode: string, url: string, data: Data) => Promise<any>;
 
 export interface AppField {
   appId: string;
@@ -75,14 +81,25 @@ export interface StatArgs {
 }
 
 export interface BaseClient {
-  use: (plugins: PluginType[]) => void;
+  use: (plugins: Plugin[]) => void;
   statistic: (data: StatArgs) => void;
   report: (pluginName: string, data: any) => void;
 }
 
-export type PluginType = () => {
+export interface Event {
+  type: string;
+
+  [key: string]: any;
+}
+
+export type Plugin = {
   name: string;
-  init: (args: { report: (data: any) => void }) => void;
-  onEventBeforeSend: (any) => any;
-  onEventSendAfter: (any) => void;
+  setup: (args: { report: (data: any) => void }) => void;
+  onEventBeforeSend?: (e: Event) => Event;
+  onEventSendAfter?: (any) => void;
 };
+
+export interface userData {
+  uid: string;
+  data: { [key: string]: any };
+}

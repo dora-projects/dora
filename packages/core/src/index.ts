@@ -1,3 +1,6 @@
 export { logger } from "./logger";
-export * from "./types";
 export { Client } from "./client";
+
+export * from "./types";
+export * from "./utils";
+export * from "./config";

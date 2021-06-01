@@ -1,7 +1,9 @@
-export const ErrorPlugin = (conf?) => {
+import { Plugin } from "@doras/core";
+
+export const ErrorPlugin = (conf?): Plugin => {
   return {
     name: "@doras/browser-error-plugin",
-    init: ({ report }) => {
+    setup: ({ report }) => {
       const oldOnErrorHandler = window.onerror;
       window.onerror = function (msg, url, line, column, error) {
         report({ msg, url, line, column, error });
