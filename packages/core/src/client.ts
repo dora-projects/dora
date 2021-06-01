@@ -78,7 +78,10 @@ export class Client implements BaseClient {
   async report(pluginName, originEvent) {
     logger().debug(`received ${pluginName} report data: `, originEvent);
 
-    const event = await executorBeforeSend(this.pluginHooks.onEventBeforeSend, originEvent);
+    const event = await executorBeforeSend(
+      this.pluginHooks.onEventBeforeSend,
+      originEvent
+    );
     console.log(event);
   }
 
