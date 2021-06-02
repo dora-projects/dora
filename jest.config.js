@@ -2,6 +2,7 @@
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
+  verbose: true,
   clearMocks: true,
   // The directory where Jest should output its coverage files
   coverageDirectory: "coverage",
@@ -17,8 +18,8 @@ module.exports = {
 
   // The glob patterns Jest uses to detect test files
   transform: {
-    "\\.(ts)$": "<rootDir>/tools/jest/jest.transform.ts.js"
-    // "\\.(ts)$": "babel-jest"
+    // "\\.(ts)$": "<rootDir>/tools/jest/jest.transform.ts.js"
+    "\\.(ts)$": "babel-jest"
   },
   testMatch: [
     //   "**/__tests__/**/*.[jt]s?(x)",
