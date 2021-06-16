@@ -11,7 +11,9 @@ const Browser = {
       return Browser._client;
     }
 
-    const conf = verifyBrowserConfig(config);
+    const { config: conf, pass } = verifyBrowserConfig(config);
+    if (!pass) return;
+
     Browser._client = new Client(conf);
 
     return Browser._client;

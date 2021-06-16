@@ -1,16 +1,26 @@
 import { logger } from "./logger";
-import { BaseConfig, StatField, BaseClient, userData } from "./types";
 import {
   executorSetups,
   executorBeforeSend,
   executorSendAfter
-} from "./helper";
+} from "./executor";
+import {
+  BaseConfig,
+  EventLike,
+  StatField,
+  BaseClient,
+  userData
+} from "./types";
 
 export class Client implements BaseClient {
+  private serverUrl: string;
+
   private appId: string;
-  private appName: string;
   private appVersion: string;
+  private appEnv: string;
+
   private sampleRate: number;
+
   private user: userData;
   private transfer: (data) => Promise<any>;
   private pluginHooks: {
@@ -19,6 +29,14 @@ export class Client implements BaseClient {
   };
 
   constructor(conf: BaseConfig) {
+    this.serverUrl = conf.serverUrl;
+
+    this.appId = conf.appId;
+    this.appVersion = conf.appVersion;
+    this.appEnv = conf.appEnv;
+
+    this.sampleRate = conf.sampleRate;
+
     this.pluginHooks = {
       onEventBeforeSend: [],
       onEventSendAfter: []
@@ -72,14 +90,14 @@ export class Client implements BaseClient {
     this.pluginHooks = result.pluginHooks;
 
     // 执行 setups
-    executorSetups(result.pluginSetups, client);
+    executorSetups(result.pluginSetups, client, { serverUrl: this.serverUrl });
   }
 
   statistic(data: StatField) {
-    console.log(data);
+    this.report("stat", { type: "stat", ...data }).then(() => {});
   }
 
-  async report(pluginName, originEvent) {
+  async report(pluginName, originEvent: EventLike) {
     logger().debug(`received ${pluginName} report data: `, originEvent);
 
     // hook onEventBeforeSend

@@ -1,4 +1,4 @@
-import { isString, isBoolean, isEmpty, isObject, isUrl } from "./utils";
+import { isString, isBoolean, isEmpty, isObject, isUrl } from "@doras/shared";
 
 export const BaseSchema = {
   serverUrl: {

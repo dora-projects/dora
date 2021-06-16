@@ -1,11 +1,11 @@
 import { logger } from "./logger";
 
-export const executorSetups = (funcArray, client) => {
+export const executorSetups = (funcArray, client, config) => {
   funcArray.forEach(async (func) => {
     try {
       logger().debug(`${func.pluginName} setup exec!`);
       const report = client.report.bind(client, func.pluginName);
-      await func.call(null, { report });
+      await func.call(null, { report, config });
     } catch (e) {
       logger().error(`${func.pluginName} init catch error, so break！！！ `, e);
     }

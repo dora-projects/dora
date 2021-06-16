@@ -1,7 +1,7 @@
 import { Plugin } from "@doras/core";
 import Perfume from "perfume.js";
 
-export const PerfumePlugin = (conf): Plugin => {
+export const PerfumePlugin = (conf?): Plugin => {
   return {
     name: "@doras/perfume-plugin",
     setup: ({ report }) => {
@@ -54,16 +54,16 @@ function handleNavigationTiming(data) {
     headerSize,
     dnsLookupTime
   } = data;
-  return { type: "performance", ...data };
+  return { type: "performance", subType: "navigationTiming", ...data };
 }
 
 function handleDataConsumption(data) {
   const { beacon, css, fetch, img, other, script, total, xmlhttprequest } =
     data;
 
-  return { type: "performance", ...data };
+  return { type: "performance", subType: "dataConsumption", ...data };
 }
 
 function handleAggMetric(data) {
-  return { type: "performance", ...data };
+  return { type: "performance", subType: "aggMetric", ...data };
 }

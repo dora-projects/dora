@@ -34,3 +34,18 @@ export function isEmptyObject(obj: any): boolean {
   if (!obj) return true;
   return Object.keys(obj).length === 0;
 }
+
+export function decorator(
+  source: any,
+  name: string,
+  behavior: (origin) => any
+) {
+  if (!(name in source)) return;
+
+  const original = source[name];
+
+  const wrapped = behavior(original);
+  source[name] = wrapped;
+
+  return original;
+}

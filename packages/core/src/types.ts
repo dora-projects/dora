@@ -4,21 +4,25 @@ export interface Data {
 
 export interface BaseConfig {
   serverUrl: string;
+
   appId: string;
   appEnv: string;
   appVersion: string;
-  user?: userData;
-  userStore?: () => userData;
+
   sampleRate?: number;
+
+  user?: userData;
   transfer?: (mode: string, url: string, data: Data) => Promise<any>;
   plugins?: Plugin[];
+
+  [key: string]: any;
 }
 
 export type Transport = (mode: string, url: string, data: Data) => Promise<any>;
 
-export interface BaseEvent {
-  type: "api" | "error" | "page" | "performance" | "stat";
-  subType: string;
+export interface EventLike {
+  type: "api" | "error" | "visit" | "performance" | "stat";
+  subType?: string;
 
   [key: string]: any;
 }
@@ -37,10 +41,8 @@ export interface PageField {
 }
 
 export interface DeviceField {
-  devType: string;
   devScreen: string;
   devViewport: string;
-  devScreenColors: string;
   devUa: string;
 }
 
@@ -79,24 +81,28 @@ export interface StatField {
   statValue: string;
 }
 
-// 事件
-export type PageEvent = BaseEvent & PageField & DeviceField & UserField;
+// pv uv 统计
+export type PageEvent = EventLike & PageField & DeviceField & UserField;
 
-export type ApiEvent = BaseEvent &
+// Api 错误
+export type ApiEvent = EventLike &
   PageField &
   DeviceField &
   UserField &
   ApiField;
 
-export type ErrorEvent = BaseEvent &
+// 代码错误
+export type ErrorEvent = EventLike &
   PageField &
   DeviceField &
   UserField &
   ErrorField;
 
-export type PerfEvent = BaseEvent & PageField & DeviceField & PerfField;
+// 性能
+export type PerfEvent = EventLike & PageField & DeviceField & PerfField;
 
-export type StatEvent = BaseEvent & PageField & StatField & UserField;
+// 打点
+export type StatEvent = EventLike & PageField & StatField & UserField;
 
 export interface BaseClient {
   use: (plugins: Plugin[]) => void;
@@ -106,7 +112,7 @@ export interface BaseClient {
 
 export type Plugin = {
   name: string;
-  setup: (args: { report: (data: any) => void }) => void;
+  setup: (args: { report: (data: any) => void; config: BaseConfig }) => void;
   onEventBeforeSend?: (originEvent: Event) => Event;
   onEventSendAfter?: (event: Event, res) => void;
 };

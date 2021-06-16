@@ -17,6 +17,9 @@
     "dist/**/*",
     "types/**/*"
   ],
+  "dependencies": {
+    "@doras/shared": "0.0.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nanzm/dora.git"
@@ -27,6 +30,5 @@
   "bugs": {
     "url": "https://github.com/nanzm/dora/issues"
   },
-  "homepage": "https://github.com/nanzm/dora#readme",
-  "gitHead": "85a1fc36f4daab6015471c9719da0ff3b546c659"
+  "homepage": "https://github.com/nanzm/dora#readme"
 }

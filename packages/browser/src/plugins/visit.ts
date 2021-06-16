@@ -1,8 +1,8 @@
 import { Plugin } from "@doras/core";
 
-export const PagePlugin = (conf): Plugin => {
+export const VisitPlugin = (conf?): Plugin => {
   return {
-    name: "@doras/browser-page-plugin",
+    name: "@doras/browser-visit-plugin",
     setup: ({ report }) => {},
     onEventBeforeSend: (event) => {
       return event;
