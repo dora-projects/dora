@@ -10,6 +10,7 @@ Dora.init({
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./view/App";
+import "./g.css";
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,0 +1,24 @@
+* {
+    box-sizing: border-box;
+}
+
+.section {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.section button{
+    cursor: pointer;
+    background: #fff;
+    color: black;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.section button:active{
+    background: #cccccc;
+}
