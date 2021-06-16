@@ -1,4 +1,4 @@
-import { DeviceField, Plugin } from "@doras/core";
+import { DeviceField, PageField, Plugin } from "@doras/core";
 
 export const DevicePlugin = (conf?): Plugin => {
   return {
@@ -10,7 +10,11 @@ export const DevicePlugin = (conf?): Plugin => {
         devViewport: getViewPort(),
         devUa: getUA()
       };
-      return { ...event, ...deviceInfo };
+      const pageInfo: PageField = {
+        pageTitle: document.title,
+        pageLocation: window.location.href
+      };
+      return { ...event, ...deviceInfo, ...pageInfo };
     }
   };
 };

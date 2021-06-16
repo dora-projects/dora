@@ -9,6 +9,7 @@ export interface BaseConfig {
   appEnv: string;
   appVersion: string;
 
+  debug?: boolean;
   sampleRate?: number;
 
   user?: userData;
@@ -37,7 +38,6 @@ export interface AppField {
 export interface PageField {
   pageTitle: string;
   pageLocation: string;
-  pageLang: string;
 }
 
 export interface DeviceField {

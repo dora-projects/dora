@@ -1,3 +1,4 @@
+import { timeout } from "@doras/shared";
 import { logger } from "./logger";
 import {
   executorSetups,
@@ -23,9 +24,18 @@ export class Client implements BaseClient {
     onEventSendAfter: any[];
   };
 
+  private eventQueue: EventLike[];
+  private delay: {
+    start: () => Promise<any>;
+    timer: any;
+    cancel: (err?) => void;
+  };
+
   constructor(conf: BaseConfig) {
     this.conf = conf;
     this.transfer = conf.transfer;
+
+    this.eventQueue = [];
 
     this.pluginHooks = {
       onEventBeforeSend: [],
@@ -85,21 +95,43 @@ export class Client implements BaseClient {
   }
 
   async report(pluginName, originEvent: EventLike) {
-    logger().debug(`received ${pluginName} report data: `, originEvent);
+    try {
+      logger().debug(`received ${pluginName} report data: `, originEvent);
 
-    // hook onEventBeforeSend
-    const event = await executorBeforeSend(
-      this.pluginHooks.onEventBeforeSend,
-      originEvent
-    );
+      // hook onEventBeforeSend
+      const event = await executorBeforeSend(
+        this.pluginHooks.onEventBeforeSend,
+        originEvent
+      );
 
-    // transfer to server
-    const res = await this.transfer("ajax", this.conf.serverUrl, event);
+      // 放入 eventQueue
+      this.eventQueue.push(event);
 
-    // hook onEventSendAfter
-    await executorSendAfter(this.pluginHooks.onEventSendAfter, event, res);
+      // transfer to server
+      await this.batchTransfer();
 
-    return res;
+      // hook onEventSendAfter
+      await executorSendAfter(this.pluginHooks.onEventSendAfter, event);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async batchTransfer() {
+    try {
+      if (this.delay?.timer) {
+        this.delay?.cancel();
+      }
+
+      // 600 毫秒内只发送一次
+      this.delay = timeout(600);
+      await this.delay?.start();
+
+      await this.transfer("sendBeacon", this.conf.serverUrl, this.eventQueue);
+
+      // 置空
+      this.eventQueue = [];
+    } catch (e) {}
   }
 
   setUser(uid: string, data?: { [key: string]: any }) {

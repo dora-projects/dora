@@ -30,9 +30,7 @@ export const ResourcePlugin = (conf?): Plugin => {
             selector,
             outerHTML
           };
-          report({ type: "resource", resource: detail }).catch((e) => {
-            console.log(e);
-          });
+          report({ type: "resource", resource: detail }).catch((e) => {});
         },
         true
       );

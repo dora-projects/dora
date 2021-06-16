@@ -18,9 +18,7 @@ export const ErrorPlugin = (conf?): Plugin => {
         report({
           type: "error",
           error: { msg, url, line, column, error }
-        }).catch((e) => {
-          console.log(e);
-        });
+        }).catch((e) => {});
 
         if (oldOnErrorHandler) {
           return oldOnErrorHandler.apply(this, arguments);

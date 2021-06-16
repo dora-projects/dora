@@ -40,11 +40,11 @@ export const executorBeforeSend = async (funcArray, originEvent) => {
   return acc;
 };
 
-export const executorSendAfter = async (funcArray, event, res) => {
+export const executorSendAfter = async (funcArray, event) => {
   if (!funcArray || funcArray.length === 0) return;
   for await (const func of funcArray) {
     try {
-      const result = await func.call(null, event, res);
+      const result = await func.call(null, event);
       logger().debug(`beforeSend hook executed ${func.pluginName}`, result);
 
       if (!result) {

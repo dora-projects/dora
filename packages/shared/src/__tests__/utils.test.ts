@@ -1,4 +1,4 @@
-import { isEmptyObject, isString } from "..";
+import { isEmptyObject, isString, parseUrl } from "..";
 
 it("should isEmptyObject work", function () {
   expect(isEmptyObject(null)).toEqual(true);
@@ -11,4 +11,17 @@ it("should isEmptyObject work", function () {
 
 it("should isString work", function () {
   expect(isString("")).toEqual(true);
+});
+
+it("should parseUrl work", function () {
+  expect(
+    parseUrl(
+      "https://gitee.com/dora-platform/dora-sdk-js/blob/master/src/utils/mixin.ts"
+    )
+  ).toEqual({
+    host: "gitee.com",
+    path: "/dora-platform/dora-sdk-js/blob/master/src/utils/mixin.ts",
+    protocol: "https",
+    relative: "/dora-platform/dora-sdk-js/blob/master/src/utils/mixin.ts"
+  });
 });

@@ -15,9 +15,7 @@ export const PerfumePlugin = (conf?): Plugin => {
                 type: "performance",
                 subType: "navigationTiming",
                 performance: data
-              }).catch((e) => {
-                console.log(e);
-              });
+              }).catch((e) => {});
 
               return;
 
@@ -26,9 +24,7 @@ export const PerfumePlugin = (conf?): Plugin => {
                 type: "performance",
                 subType: "dataConsumption",
                 performance: data
-              }).catch((e) => {
-                console.log(e);
-              });
+              }).catch((e) => {});
 
               return;
 
@@ -53,9 +49,7 @@ export const PerfumePlugin = (conf?): Plugin => {
                     type: "performance",
                     subType: "aggMetric",
                     performance: { ...bucket }
-                  }).catch((e) => {
-                    console.log(e);
-                  });
+                  }).catch((e) => {});
 
                   bucket = {};
                 }

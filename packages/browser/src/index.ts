@@ -24,6 +24,8 @@ const Browser = {
       appId: "",
       appVersion: "",
       serverUrl: "",
+      isSpa: true,
+      debug: false,
       transfer: BrowserTransport,
       plugins: [
         DevicePlugin(),

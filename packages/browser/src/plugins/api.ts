@@ -54,7 +54,6 @@ export const ApiPlugin = (conf?): Plugin => {
               reportApiError(xhr);
             }
           }
-          console.log("replaceOnreadystatechange", xhr);
 
           return original.apply(xhr, readyStateArgs);
         };

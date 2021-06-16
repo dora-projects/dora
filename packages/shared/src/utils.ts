@@ -56,3 +56,53 @@ export function decorator(
 
   return original;
 }
+
+export function parseUrl(url: string): {
+  host?: string;
+  path?: string;
+  protocol?: string;
+  relative?: string;
+} {
+  if (typeof url !== "string") {
+    return {};
+  }
+
+  const match = url.match(
+    /^(([^:/?#]+):)?(\/\/([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?$/
+  );
+
+  if (!match) {
+    return {};
+  }
+
+  const query = match[6] || "";
+  const fragment = match[8] || "";
+  return {
+    host: match[4],
+    path: match[5],
+    protocol: match[2],
+    relative: match[5] + query + fragment
+  };
+}
+
+export function timeout(ms) {
+  const p = {} as {
+    start: () => Promise<any>;
+    timer: any;
+    cancel: (err?) => void;
+  };
+
+  p.start = () =>
+    new Promise(function (resolve, reject) {
+      p.timer = setTimeout(function () {
+        resolve();
+      }, ms);
+
+      p.cancel = function (err) {
+        p.timer && clearTimeout(p.timer);
+        reject(err || new Error("cancel"));
+      };
+    });
+
+  return p;
+}
