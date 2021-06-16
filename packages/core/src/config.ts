@@ -43,7 +43,7 @@ export const BaseSchema = {
 export function verifyConfig<D>(config: D, schema) {
   const keys = Object.keys(schema) || [];
 
-  return keys.reduce(
+  const result = keys.reduce(
     (accumulator, key) => {
       const configValue = config[key];
       const { defaultValue, message, validate, require } = schema[key];
@@ -76,4 +76,9 @@ export function verifyConfig<D>(config: D, schema) {
       errors: {}
     }
   );
+
+  return {
+    config: Object.assign(config, result.config),
+    errors: result.errors
+  };
 }

@@ -1,89 +1,98 @@
-import { Plugin } from "@doras/core";
+import { ApiField, Plugin } from "@doras/core";
 import { decorator, isString } from "@doras/shared";
 
 export const ApiPlugin = (conf?): Plugin => {
   return {
     name: "@doras/browser-api-plugin",
-    setup: ({ report }) => {
-      if (!("XMLHttpRequest" in global)) {
+    setup: ({ report, config }) => {
+      if (!("XMLHttpRequest" in window)) {
         return;
       }
 
-      let requestKeys: XMLHttpRequest[] = [];
-      let requestValues: any[] = [];
       const xhrProto = XMLHttpRequest.prototype;
 
-      decorator(
-        xhrProto,
-        "open",
-        function (originalOpen: () => void): () => void {
-          return function (...args: any[]): void {
-            const xhr = this;
+      decorator(xhrProto, "open", replaceOpen);
+      decorator(xhrProto, "send", replaceSend);
 
-            try {
-              const [method, url] = args;
-              xhr.__dora__ = { method: method, url: url };
+      function replaceOpen(originalOpen: () => void): () => void {
+        return function (...args: any[]): void {
+          const xhr = this;
+          decorator(xhr, "onreadystatechange", replaceOnreadystatechange);
 
-              // url 增加sdk 标识
-              if (url === "") {
-                xhr.__dora_own_request__ = true;
-              }
-            } catch (e) {}
+          const [method, url] = args;
+          xhr.__dora__ = { method: method, url: url };
+          xhr.__dora__.timeout = xhr.timeout;
 
-            xhr.addEventListener("error", () => xhrErrHandler("error"));
-            xhr.addEventListener("timeout", () => xhrErrHandler("timeout"));
+          // sdk request
+          if (url.indexOf(config.serverUrl) > -1) {
+            xhr.__dora_own_request__ = true;
+          }
 
-            function xhrErrHandler(t): void {
-              // statusCode();
-              // bodyData();
-              if (t === "timeout") {
-                xhr.__dora__.client_timeout = xhr.timeout;
-              }
-            }
+          xhr.addEventListener("timeout", () => xhrErrHandler("timeout"));
+          xhr.addEventListener("error", () => xhrErrHandler("error"));
 
-            return originalOpen.apply(xhr, args);
-          };
-        }
-      );
+          function xhrErrHandler(t): void {
+            xhr.__dora__.type = t;
+            if (xhr.__dora_own_request__) return;
+            reportApiError(xhr);
+          }
 
-      decorator(xhrProto, "onreadystatechange", function (original): Function {
+          return originalOpen.apply(xhr, args);
+        };
+      }
+
+      function replaceOnreadystatechange(original): Function {
         return function (...readyStateArgs: any[]): void {
           const xhr = this;
 
           if (xhr.readyState === 4) {
-            // statusCode();
-            // bodyData();
+            xhr.__dora__.status = xhr.status;
 
-            // triggerBreadcrumbsHandler(xhr);
             if (xhr.status >= 500) {
-              // triggerErrorHandler(`status ${xhr.status}`, {
-              //   xhr,
-              //   req_end: Date.now()
-              // });
+              // sdk 错误不上报
+              if (xhr.__dora_own_request__) return;
+              reportApiError(xhr);
             }
           }
+          console.log("replaceOnreadystatechange", xhr);
 
           return original.apply(xhr, readyStateArgs);
         };
-      });
+      }
 
-      decorator(
-        xhrProto,
-        "send",
-        function (originalSend: () => void): () => void {
-          return function (...args: any[]): void {
-            const xhr = this;
-            requestKeys.push(xhr);
-            requestValues.push({ sendTime: Date.now(), args });
+      function replaceSend(originalSend: () => void): () => void {
+        return function (...args: any[]): void {
+          const xhr = this;
 
-            return originalSend.apply(xhr, args);
-          };
-        }
-      );
-    },
-    onEventBeforeSend: (event) => {
-      return event;
-    },
-    onEventSendAfter: () => {}
+          xhr.__dora__.sendTime = Date.now();
+          xhr.__dora__.bodyData = args.length > 0 ? args[0] : null;
+
+          return originalSend.apply(xhr, args);
+        };
+      }
+
+      function reportApiError(xhr) {
+        const {
+          type = "ServerError",
+          url,
+          method,
+          status,
+          bodyData,
+          timeout
+        } = xhr.__dora__;
+
+        const errorReason: ApiField = {
+          apiType: type,
+          apiUrl: url,
+          apiMethod: method,
+          apiTimeout: timeout,
+          apiStatus: status,
+          apiRequest: bodyData,
+          apiResponse: xhr.response
+        };
+
+        report({ type: "api", apiError: errorReason }).catch(() => {});
+      }
+    }
   };
 };

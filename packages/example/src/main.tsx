@@ -1,10 +1,10 @@
-import Dora, { WebVitalsPlugin, ErrorPlugin } from "@doras/browser";
+import Dora from "@doras/browser";
 
 Dora.init({
-  appEnv: "",
-  serverUrl: "",
-  appId: "",
-  appVersion: ""
+  appEnv: "dev",
+  serverUrl: "https://api.nancode.cn/amp",
+  appId: "wdssfar2312312dsad",
+  appVersion: "0.0.1"
 });
 
 import React from "react";

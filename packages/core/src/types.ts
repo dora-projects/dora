@@ -21,7 +21,7 @@ export interface BaseConfig {
 export type Transport = (mode: string, url: string, data: Data) => Promise<any>;
 
 export interface EventLike {
-  type: "api" | "error" | "visit" | "performance" | "stat";
+  type: "api" | "error" | "resource" | "visit" | "performance" | "stat";
   subType?: string;
 
   [key: string]: any;
@@ -53,15 +53,16 @@ export interface UserField {
 
 // 性能
 export interface PerfField {
-  perfGroupName: "navigationTiming" | "dataConsumption" | "aggMetric";
+  perfGroupName: "navigation_timing" | "data_consumption" | "agg_metric";
 }
 
 // 网络
 export interface ApiField {
-  apiType: string;
+  apiType: "server_error" | "timeout" | "error";
   apiUrl: string;
   apiMethod: string;
   apiStatus: string;
+  apiTimeout: number;
   apiRequest: string;
   apiResponse: string;
 }
@@ -107,14 +108,17 @@ export type StatEvent = EventLike & PageField & StatField & UserField;
 export interface BaseClient {
   use: (plugins: Plugin[]) => void;
   statistic: (data: StatField) => void;
-  report: (pluginName: string, data: any) => void;
+  report: (pluginName: string, data: any) => Promise<void>;
 }
 
 export type Plugin = {
   name: string;
-  setup: (args: { report: (data: any) => void; config: BaseConfig }) => void;
-  onEventBeforeSend?: (originEvent: Event) => Event;
-  onEventSendAfter?: (event: Event, res) => void;
+  setup: (args: {
+    report: (data: EventLike) => Promise<void>;
+    config: BaseConfig;
+  }) => void;
+  onEventBeforeSend?: (originEvent: EventLike) => EventLike;
+  onEventSendAfter?: (event: EventLike, res) => void;
 };
 
 export interface userData {

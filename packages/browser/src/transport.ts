@@ -6,15 +6,11 @@ export const BrowserTransport: Transport = (
   data
 ) => {
   return new Promise((resolve, reject) => {
-    if (navigator.sendBeacon) {
-      data.sendMode = "sendBeacon";
-
+    if (mode === "sendBeacon" && navigator.sendBeacon) {
       const json = JSON.stringify(data);
       const result = navigator.sendBeacon(url, json);
       resolve(result);
     } else {
-      data.sendMode = "ajax";
-
       const json = JSON.stringify(data);
       const xhr = new XMLHttpRequest();
 

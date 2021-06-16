@@ -8,7 +8,7 @@ export enum LEVEL {
 }
 
 // 默认 info
-let userSetting = LEVEL.info;
+let userSetting = LEVEL.debug;
 export const setLoggerLevel = (level: LEVEL) => {
   userSetting = level;
 };

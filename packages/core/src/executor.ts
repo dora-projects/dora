@@ -1,41 +1,37 @@
+import { BaseClient, BaseConfig } from "./types";
 import { logger } from "./logger";
 
-export const executorSetups = (funcArray, client, config) => {
+export const executorSetups = (
+  funcArray,
+  client: BaseClient,
+  config: BaseConfig
+) => {
   funcArray.forEach(async (func) => {
     try {
-      logger().debug(`${func.pluginName} setup exec!`);
+      logger().debug(`setup ${func.pluginName}`);
       const report = client.report.bind(client, func.pluginName);
       await func.call(null, { report, config });
     } catch (e) {
-      logger().error(`${func.pluginName} init catch error, so break！！！ `, e);
+      logger().error(`setup catch error ${func.pluginName}`, e);
     }
   });
 };
 
 export const executorBeforeSend = async (funcArray, originEvent) => {
+  if (!funcArray || funcArray.length === 0) return;
   let acc = originEvent;
-
   for await (const func of funcArray) {
     try {
       const result = await func.call(null, acc);
-      logger().debug(
-        `${func.pluginName} beforeSend hook executed, got result: `,
-        result
-      );
+      logger().debug(`beforeSend ${func.pluginName}`, result);
       acc = result;
 
       if (!result) {
-        logger().debug(
-          `${func.pluginName} beforeSend get false result, so break！！！ `,
-          result
-        );
+        logger().debug(`beforeSend break ${func.pluginName}`, result);
         break;
       }
     } catch (e) {
-      logger().error(
-        `${func.pluginName} beforeSend catch error, so break！！！ `,
-        e
-      );
+      logger().error(`beforeSend catch error ${func.pluginName}`, e);
       acc = null;
       break;
     }
@@ -45,26 +41,18 @@ export const executorBeforeSend = async (funcArray, originEvent) => {
 };
 
 export const executorSendAfter = async (funcArray, event, res) => {
+  if (!funcArray || funcArray.length === 0) return;
   for await (const func of funcArray) {
     try {
       const result = await func.call(null, event, res);
-      logger().debug(
-        `${func.pluginName} beforeSend hook executed, got result: `,
-        result
-      );
+      logger().debug(`beforeSend hook executed ${func.pluginName}`, result);
 
       if (!result) {
-        logger().debug(
-          `${func.pluginName} beforeSend get false result, so break！！！ `,
-          result
-        );
+        logger().debug(`beforeSend get false ${func.pluginName}`, result);
         break;
       }
     } catch (e) {
-      logger().error(
-        `${func.pluginName} beforeSend catch error, so break！！！ `,
-        e
-      );
+      logger().error(`beforeSend catch error ${func.pluginName}`, e);
       break;
     }
   }

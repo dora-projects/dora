@@ -9,33 +9,23 @@ import {
   EventLike,
   StatField,
   BaseClient,
-  userData
+  userData,
+  Transport
 } from "./types";
 
 export class Client implements BaseClient {
-  private serverUrl: string;
-
-  private appId: string;
-  private appVersion: string;
-  private appEnv: string;
-
-  private sampleRate: number;
+  readonly conf: BaseConfig;
 
   private user: userData;
-  private transfer: (data) => Promise<any>;
+  private readonly transfer: Transport;
   private pluginHooks: {
     onEventBeforeSend: any[];
     onEventSendAfter: any[];
   };
 
   constructor(conf: BaseConfig) {
-    this.serverUrl = conf.serverUrl;
-
-    this.appId = conf.appId;
-    this.appVersion = conf.appVersion;
-    this.appEnv = conf.appEnv;
-
-    this.sampleRate = conf.sampleRate;
+    this.conf = conf;
+    this.transfer = conf.transfer;
 
     this.pluginHooks = {
       onEventBeforeSend: [],
@@ -52,9 +42,6 @@ export class Client implements BaseClient {
     const result = plugins.reduce(
       (acc, plugin) => {
         const { name, setup, onEventBeforeSend, onEventAfterSend } = plugin;
-
-        logger().debug(`${name} has install`);
-
         //name
         name && acc.pluginNames.push(name);
 
@@ -90,7 +77,7 @@ export class Client implements BaseClient {
     this.pluginHooks = result.pluginHooks;
 
     // 执行 setups
-    executorSetups(result.pluginSetups, client, { serverUrl: this.serverUrl });
+    executorSetups(result.pluginSetups, client, this.conf);
   }
 
   statistic(data: StatField) {
@@ -107,10 +94,12 @@ export class Client implements BaseClient {
     );
 
     // transfer to server
-    const res = await this.transfer(event);
+    const res = await this.transfer("ajax", this.conf.serverUrl, event);
 
     // hook onEventSendAfter
     await executorSendAfter(this.pluginHooks.onEventSendAfter, event, res);
+
+    return res;
   }
 
   setUser(uid: string, data?: { [key: string]: any }) {

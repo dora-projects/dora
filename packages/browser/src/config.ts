@@ -7,42 +7,14 @@ import {
   isEmptyObject
 } from "@doras/shared";
 import { BrowserConfig } from "./types";
-import { BrowserTransport } from "./transport";
-import {
-  ApiPlugin,
-  DevicePlugin,
-  ErrorPlugin,
-  VisitPlugin,
-  PerfumePlugin
-} from "./plugins";
 
 export const BrowserSchema = {};
 
-export const defaultConfig: BrowserConfig = {
-  appEnv: "",
-  appId: "",
-  appVersion: "",
-  serverUrl: "",
-  userStore: () => {
-    return {
-      uid: "",
-      data: {}
-    };
-  },
-  transfer: BrowserTransport,
-  plugins: [
-    DevicePlugin(),
-    VisitPlugin(),
-    ApiPlugin(),
-    ErrorPlugin(),
-    PerfumePlugin()
-  ]
-};
-
 export const verifyBrowserConfig = (
-  config
+  defaultConfig: BrowserConfig,
+  userConfig: BrowserConfig
 ): { config: BrowserConfig; pass: boolean } => {
-  const mergedConf = Object.assign(defaultConfig, config);
+  const mergedConf = Object.assign(defaultConfig, userConfig);
   const mergedSchema = Object.assign(BaseSchema, BrowserSchema);
 
   const result = verifyConfig<BrowserConfig>(mergedConf, mergedSchema);

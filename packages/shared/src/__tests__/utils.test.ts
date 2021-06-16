@@ -1,4 +1,4 @@
-import { isEmptyObject, isString } from "../utils";
+import { isEmptyObject, isString } from "..";
 
 it("should isEmptyObject work", function () {
   expect(isEmptyObject(null)).toEqual(true);
