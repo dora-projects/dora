@@ -3,8 +3,10 @@ import {
   isBoolean,
   isNumber,
   isObject,
+  isEmptyObject,
   verifyConfig,
-  BaseSchema
+  BaseSchema,
+  logger
 } from "@doras/core";
 import { BrowserConfig } from "./types";
 import { BrowserTransport } from "./transport";
@@ -29,7 +31,11 @@ export const defaultConfig: BrowserConfig = {
 export const verifyBrowserConfig = (config): BrowserConfig => {
   const mergedConf = Object.assign(defaultConfig, config);
   const mergedSchema = Object.assign(BaseSchema, BrowserSchema);
+
   const result = verifyConfig<BrowserConfig>(mergedConf, mergedSchema);
-  console.log(JSON.stringify(result, null, 2));
+
+  if (!isEmptyObject(result.errors)) {
+    logger().warn("配置错误：", JSON.stringify(result, null, 2));
+  }
   return result.config;
 };

@@ -29,3 +29,8 @@ export function isObject(value: any): value is Object {
 export function isPromise(value: any): value is Promise<any> {
   return value instanceof Promise;
 }
+
+export function isEmptyObject(obj: any): boolean {
+  if (!obj) return true;
+  return Object.keys(obj).length === 0;
+}

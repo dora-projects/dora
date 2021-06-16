@@ -1,6 +1,10 @@
 import { logger } from "./logger";
-import { BaseConfig, StatArgs, BaseClient, userData } from "./types";
-import { executorBeforeSend, executorSetups } from "./helper";
+import { BaseConfig, StatField, BaseClient, userData } from "./types";
+import {
+  executorSetups,
+  executorBeforeSend,
+  executorSendAfter
+} from "./helper";
 
 export class Client implements BaseClient {
   private appId: string;
@@ -71,18 +75,24 @@ export class Client implements BaseClient {
     executorSetups(result.pluginSetups, client);
   }
 
-  statistic(data: StatArgs) {
+  statistic(data: StatField) {
     console.log(data);
   }
 
   async report(pluginName, originEvent) {
     logger().debug(`received ${pluginName} report data: `, originEvent);
 
+    // hook onEventBeforeSend
     const event = await executorBeforeSend(
       this.pluginHooks.onEventBeforeSend,
       originEvent
     );
-    console.log(event);
+
+    // transfer to server
+    const res = await this.transfer(event);
+
+    // hook onEventSendAfter
+    await executorSendAfter(this.pluginHooks.onEventSendAfter, event, res);
   }
 
   setUser(uid: string, data?: { [key: string]: any }) {

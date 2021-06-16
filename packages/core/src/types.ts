@@ -16,6 +16,13 @@ export interface BaseConfig {
 
 export type Transport = (mode: string, url: string, data: Data) => Promise<any>;
 
+export interface BaseEvent {
+  type: "api" | "error" | "page" | "performance" | "stat";
+  subType: string;
+
+  [key: string]: any;
+}
+
 export interface AppField {
   appId: string;
   appName: string;
@@ -44,8 +51,7 @@ export interface UserField {
 
 // 性能
 export interface PerfField {
-  perfName: string;
-  perfValue: number;
+  perfGroupName: "navigationTiming" | "dataConsumption" | "aggMetric";
 }
 
 // 网络
@@ -66,37 +72,43 @@ export interface ErrorField {
 }
 
 // 打点
-export interface EventField {
-  eventCategory: string;
-  eventAction: string;
-  eventLabel: string;
-  eventValue: string;
+export interface StatField {
+  statCategory: string;
+  statAction: string;
+  statLabel: string;
+  statValue: string;
 }
 
-export interface StatArgs {
-  category: string;
-  action: string;
-  label: string;
-  value: string;
-}
+// 事件
+export type PageEvent = BaseEvent & PageField & DeviceField & UserField;
+
+export type ApiEvent = BaseEvent &
+  PageField &
+  DeviceField &
+  UserField &
+  ApiField;
+
+export type ErrorEvent = BaseEvent &
+  PageField &
+  DeviceField &
+  UserField &
+  ErrorField;
+
+export type PerfEvent = BaseEvent & PageField & DeviceField & PerfField;
+
+export type StatEvent = BaseEvent & PageField & StatField & UserField;
 
 export interface BaseClient {
   use: (plugins: Plugin[]) => void;
-  statistic: (data: StatArgs) => void;
+  statistic: (data: StatField) => void;
   report: (pluginName: string, data: any) => void;
-}
-
-export interface Event {
-  type: string;
-
-  [key: string]: any;
 }
 
 export type Plugin = {
   name: string;
   setup: (args: { report: (data: any) => void }) => void;
-  onEventBeforeSend?: (e: Event) => Event;
-  onEventSendAfter?: (any) => void;
+  onEventBeforeSend?: (originEvent: Event) => Event;
+  onEventSendAfter?: (event: Event, res) => void;
 };
 
 export interface userData {

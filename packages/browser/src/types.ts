@@ -1,3 +1,3 @@
-import { logger, Client, BaseConfig, StatArgs } from "@doras/core";
+import { logger, Client, BaseConfig } from "@doras/core";
 
 export type BrowserConfig = BaseConfig & {};

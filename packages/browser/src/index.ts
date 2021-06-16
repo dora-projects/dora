@@ -1,4 +1,4 @@
-import { logger, Client, StatArgs } from "@doras/core";
+import { logger, Client, StatField } from "@doras/core";
 import { verifyBrowserConfig } from "./config";
 import { BrowserConfig } from "./types";
 
@@ -16,7 +16,7 @@ const Browser = {
 
     return Browser._client;
   },
-  stat: (data: StatArgs) => {
+  stat: (data: StatField) => {
     if (!Browser._client) {
       Browser.logger().warn("please call init first.");
       return Browser._client;
@@ -28,4 +28,4 @@ const Browser = {
 export default Browser;
 
 export * from "./plugins/error";
-export * from "./plugins/performance";
+export * from "./plugins/perfume";
