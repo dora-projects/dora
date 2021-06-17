@@ -14,8 +14,7 @@
     "b:types:watch": "tsc -w"
   },
   "files": [
-    "dist/**/*",
-    "types/**/*"
+    "dist/**/*"
   ],
   "dependencies": {
     "@doras/core": "^0.0.2-alpha.6+85a1fc3",

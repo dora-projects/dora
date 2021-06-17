@@ -9,4 +9,7 @@ export const infoLog = console.info.bind(
   `font-size:12px`
 );
 
-export const log = getGlobal().__dora__?.logger || noop;
+export const log = (...args) => {
+  const l = getGlobal().__dora__?.logger || noop;
+  return l.apply(null, args);
+};

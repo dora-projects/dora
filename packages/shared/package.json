@@ -14,8 +14,7 @@
     "b:types:watch": "tsc -w"
   },
   "files": [
-    "dist/**/*",
-    "types/**/*"
+    "dist/**/*"
   ],
   "repository": {
     "type": "git",
