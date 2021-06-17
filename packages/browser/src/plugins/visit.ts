@@ -50,7 +50,7 @@ export const VisitPlugin = (conf?): Plugin => {
           from: formParsed.relative,
           to: toParsed.relative
         };
-        report({ type: "visit", view: visitData }).catch(() => {});
+        report({ type: "visit", router: visitData }).catch(() => {});
       }
 
       // dom ready 页面加载时统计
@@ -61,7 +61,7 @@ export const VisitPlugin = (conf?): Plugin => {
           from: undefined,
           to: parsed.relative
         };
-        report({ type: "visit", subType: "entry", view: visitData }).catch(
+        report({ type: "visit", subType: "entry", router: visitData }).catch(
           () => {}
         );
       });

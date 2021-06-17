@@ -3,6 +3,7 @@ import { log, infoLog, getGlobal, noop } from "@doras/shared";
 import { verifyBrowserConfig } from "./config";
 import { BrowserConfig, UserConfig } from "./types";
 import { BrowserTransport } from "./transport";
+import { genUid } from "./user";
 import {
   ApiPlugin,
   DevicePlugin,
@@ -50,16 +51,25 @@ const Browser = {
 
     // new Client
     const c = new Client(conf);
+    c.setUser(genUid());
+
     global.__dora__.client = c;
 
     log("sdk ready!");
 
     return c;
   },
+  setUser: (uid: string, data?: { [key: string]: any }) => {
+    if (!global.__dora__?.client) {
+      log("please call init first.");
+      return;
+    }
+    global.__dora__?.client.setUser(uid, data);
+  },
   stat: (data: StatField) => {
     if (!global.__dora__?.client) {
       log("please call init first.");
-      return global.__dora__?.client;
+      return;
     }
     return global.__dora__?.client.statistic(data);
   }

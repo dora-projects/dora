@@ -1,4 +1,4 @@
-import { timeout, noop } from "@doras/shared";
+import { timeout, createUUID } from "@doras/shared";
 import {
   executorSetups,
   executorBeforeSend,
@@ -13,6 +13,7 @@ import {
   userData,
   Transport
 } from "./types";
+import * as events from "events";
 
 export class Client implements BaseClient {
   readonly conf: BaseConfig;
@@ -98,10 +99,13 @@ export class Client implements BaseClient {
     try {
       log(`received ${pluginName} report data: `, originEvent);
 
+      // add extra info
+      const originEventExtra = this.addExtraInfo(originEvent);
+
       // hook onEventBeforeSend
       const event = await executorBeforeSend(
         this.pluginHooks.onEventBeforeSend,
-        originEvent
+        originEventExtra
       );
 
       // 放入 eventQueue
@@ -134,8 +138,21 @@ export class Client implements BaseClient {
     } catch (e) {}
   }
 
+  addExtraInfo(event: EventLike): EventLike {
+    event.uid = this.user.uid;
+    event.uData = this.user.data;
+
+    event.ts = Date.now();
+    event.eid = createUUID();
+
+    return event;
+  }
+
   setUser(uid: string, data?: { [key: string]: any }) {
-    this.user.uid = uid;
+    this.user = {
+      uid: uid,
+      data: null
+    };
     if (data) {
       this.user.data = data;
     }
