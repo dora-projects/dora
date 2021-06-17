@@ -52,3 +52,13 @@ export const getSelector = (event: Event) => {
     .filter((v: string): boolean => Boolean(v))
     .join(" > ");
 };
+
+export function getGlobal<T = Window>() {
+  return (typeof window !== "undefined"
+    ? window
+    : typeof global !== "undefined"
+    ? global
+    : typeof self !== "undefined"
+    ? self
+    : null) as unknown as T;
+}

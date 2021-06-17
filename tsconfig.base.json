@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "declaration": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDeclarationOnly": true,
+    "stripInternal": true,
+    "sourceMap": true,
+    "strict": false,
+    "incremental": false
+  }
+}

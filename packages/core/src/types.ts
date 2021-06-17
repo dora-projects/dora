@@ -12,6 +12,7 @@ export interface BaseConfig {
   debug?: boolean;
   sampleRate?: number;
 
+  logger?: (v: any) => void;
   user?: userData;
   transfer?: (mode: string, url: string, data: Data) => Promise<any>;
   plugins?: Plugin[];

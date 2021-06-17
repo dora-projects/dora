@@ -106,3 +106,5 @@ export function timeout(ms) {
 
   return p;
 }
+
+export function noop() {}

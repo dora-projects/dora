@@ -1,10 +1,10 @@
-import { timeout } from "@doras/shared";
-import { logger } from "./logger";
+import { timeout, noop } from "@doras/shared";
 import {
   executorSetups,
   executorBeforeSend,
   executorSendAfter
 } from "./executor";
+import { log } from "@doras/shared";
 import {
   BaseConfig,
   EventLike,
@@ -96,7 +96,7 @@ export class Client implements BaseClient {
 
   async report(pluginName, originEvent: EventLike) {
     try {
-      logger().debug(`received ${pluginName} report data: `, originEvent);
+      log(`received ${pluginName} report data: `, originEvent);
 
       // hook onEventBeforeSend
       const event = await executorBeforeSend(

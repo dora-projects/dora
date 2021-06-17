@@ -5,12 +5,13 @@
   "main": "dist/main.js",
   "module": "dist/module.js",
   "browser": "dist/browser.js",
-  "types": "types/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "b:types": "tsc"
+    "b:types": "tsc",
+    "b:types:watch": "tsc -w"
   },
   "files": [
     "dist/**/*",

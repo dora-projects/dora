@@ -1,4 +1,5 @@
-import { logger, Client, StatField } from "@doras/core";
+import { Client, StatField } from "@doras/core";
+import { log, infoLog, getGlobal, noop } from "@doras/shared";
 import { verifyBrowserConfig } from "./config";
 import { BrowserConfig, UserConfig } from "./types";
 import { BrowserTransport } from "./transport";
@@ -7,16 +8,17 @@ import {
   DevicePlugin,
   ErrorPlugin,
   PerfumePlugin,
+  ResourcePlugin,
   VisitPlugin
 } from "./plugins";
 
+const global = getGlobal();
+
 const Browser = {
-  logger,
-  _client: null as Client,
   init: (config: UserConfig) => {
-    if (Browser._client) {
-      Browser.logger().warn("init has been called.");
-      return Browser._client;
+    if (global.__dora__) {
+      log("init has been called.");
+      return global.__dora__;
     }
 
     const defaultConfig: BrowserConfig = {
@@ -26,34 +28,41 @@ const Browser = {
       serverUrl: "",
       isSpa: true,
       debug: false,
+      logger: infoLog,
       transfer: BrowserTransport,
       plugins: [
-        DevicePlugin(),
-        VisitPlugin(),
         ApiPlugin(),
+        DevicePlugin(),
         ErrorPlugin(),
-        PerfumePlugin()
+        PerfumePlugin(),
+        ResourcePlugin(),
+        VisitPlugin()
       ]
     };
 
+    // log
+    global.__dora__.logger = config.debug ? config.logger : noop;
+
+    // merger config
     const { config: conf, pass } = verifyBrowserConfig(defaultConfig, config);
     if (!pass) return;
 
-    Browser._client = new Client(conf);
-    Browser.logger().info("sdk ready!");
+    // new Client
+    const c = new Client(conf);
+    global.__dora__ = c;
 
-    return Browser._client;
+    log("sdk ready!");
+
+    return c;
   },
   stat: (data: StatField) => {
-    if (!Browser._client) {
-      Browser.logger().warn("please call init first.");
-      return Browser._client;
+    if (!global.__dora__) {
+      log("please call init first.");
+      return global.__dora__;
     }
-    return Browser._client.statistic(data);
+    return global.__dora__.statistic(data);
   }
 };
 
 export default Browser;
-
-export * from "./plugins/error";
-export * from "./plugins/perfume";
+export * from "./plugins";
