@@ -1,7 +1,7 @@
 import { Client, BaseConfig } from "@doras/core";
 
 export type BrowserConfig = BaseConfig & {
-  isSpa: boolean;
+  // isSpa: boolean;
 };
 
 export type UserConfig = BrowserConfig;

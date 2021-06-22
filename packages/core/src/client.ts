@@ -18,7 +18,7 @@ import * as events from "events";
 export class Client implements BaseClient {
   readonly conf: BaseConfig;
 
-  private user: userData;
+  private readonly user: userData;
   private readonly transfer: Transport;
   private pluginHooks: {
     onEventBeforeSend: any[];
@@ -35,7 +35,13 @@ export class Client implements BaseClient {
   constructor(conf: BaseConfig) {
     this.conf = conf;
     this.transfer = conf.transfer;
+    this.user = {
+      uid: conf.uid,
 
+      // business user id
+      bizUid: null,
+      bizUser: null
+    };
     this.eventQueue = [];
 
     this.pluginHooks = {
@@ -108,7 +114,7 @@ export class Client implements BaseClient {
         originEventExtra
       );
 
-      // 放入 eventQueue
+      // put event to queue
       this.eventQueue.push(event);
 
       // transfer to server
@@ -131,7 +137,7 @@ export class Client implements BaseClient {
       this.delay = timeout(600);
       await this.delay?.start();
 
-      await this.transfer("sendBeacon", this.conf.serverUrl, this.eventQueue);
+      await this.transfer(this.conf.serverUrl, this.eventQueue);
 
       // 置空
       this.eventQueue = [];
@@ -140,7 +146,9 @@ export class Client implements BaseClient {
 
   addExtraInfo(event: EventLike): EventLike {
     event.uid = this.user.uid;
-    event.uData = this.user.data;
+
+    event.buid = this.user.bizUid;
+    event.buser = this.user.bizUser;
 
     event.ts = Date.now();
     event.eid = createUUID();
@@ -148,13 +156,10 @@ export class Client implements BaseClient {
     return event;
   }
 
-  setUser(uid: string, data?: { [key: string]: any }) {
-    this.user = {
-      uid: uid,
-      data: null
-    };
-    if (data) {
-      this.user.data = data;
+  setUser(userId: string | number, userInfo?: { [key: string]: any }) {
+    this.user.bizUid = userId;
+    if (userInfo) {
+      this.user.bizUser = userInfo;
     }
   }
 

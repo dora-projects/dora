@@ -9,17 +9,18 @@ export interface BaseConfig {
   appEnv: string;
   appVersion: string;
 
+  uid?: string;
   debug?: boolean;
   sampleRate?: number;
 
   user?: userData;
-  transfer?: (mode: string, url: string, data: Data) => Promise<any>;
+  transfer?: (url: string, data: Data) => Promise<any>;
   plugins?: Plugin[];
 
   [key: string]: any;
 }
 
-export type Transport = (mode: string, url: string, data: Data) => Promise<any>;
+export type Transport = (url: string, data: Data) => Promise<any>;
 
 export interface EventLike {
   type: "api" | "error" | "resource" | "visit" | "performance" | "stat";
@@ -79,7 +80,7 @@ export interface StatField {
   statCategory: string;
   statAction: string;
   statLabel: string;
-  statValue: string;
+  statValue: any;
 }
 
 // pv uv 统计
@@ -123,5 +124,8 @@ export type Plugin = {
 
 export interface userData {
   uid: string;
-  data: { [key: string]: any };
+
+  // business user id
+  bizUid: string | number;
+  bizUser: { [key: string]: any };
 }

@@ -17,8 +17,8 @@
     "test": "jest",
     "test-cov": "jest --coverage",
     "ci": "lerna bootstrap && npm run build && npm run b:types && npm run test-cov",
-    "lint": "eslint --fix",
-    "changelog": "node tools/gen-changelog.js"
+    "publish": "lerna publish --no-private",
+    "lint": "eslint --fix"
   },
   "repository": {
     "type": "git",

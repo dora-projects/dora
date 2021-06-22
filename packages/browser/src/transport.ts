@@ -1,12 +1,8 @@
 import { Transport } from "@doras/core";
 
-export const BrowserTransport: Transport = (
-  mode: string,
-  url: string,
-  data
-) => {
+export const BrowserTransport: Transport = (url: string, data) => {
   return new Promise((resolve, reject) => {
-    if (mode === "sendBeacon" && navigator.sendBeacon) {
+    if (navigator.sendBeacon) {
       const json = JSON.stringify(data);
       const result = navigator.sendBeacon(url, json);
       resolve(result);
