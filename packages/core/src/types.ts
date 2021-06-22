@@ -36,14 +36,14 @@ export interface AppField {
 }
 
 export interface PageField {
-  pageTitle: string;
-  pageLocation: string;
+  title: string;
+  href: string;
 }
 
 export interface DeviceField {
-  devScreen: string;
-  devViewport: string;
-  devUa: string;
+  screen: string;
+  viewport: string;
+  ua: string;
 }
 
 export interface UserField {

@@ -6,13 +6,13 @@ export const DevicePlugin = (conf?): Plugin => {
     setup: ({ report }) => {},
     onEventBeforeSend: (event) => {
       const deviceInfo: DeviceField = {
-        devScreen: getScreen(),
-        devViewport: getViewPort(),
-        devUa: getUA()
+        screen: getScreen(),
+        viewport: getViewPort(),
+        ua: getUA()
       };
       const pageInfo: PageField = {
-        pageTitle: document.title,
-        pageLocation: window.location.href
+        title: document.title,
+        href: window.location.href
       };
       return { ...event, ...deviceInfo, ...pageInfo };
     }
