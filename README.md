@@ -1,10 +1,6 @@
 # dora
 ### 前端监控系统
 
-> [文档：https://dev.dora.nancode.cn](https://dev.dora.nancode.cn)
-
-> [Demo：https://dora.nancode.cn](https://dora.nancode.cn/login?user=demo)
-
 ## Todo
 - [x] 脚本错误上报
 - [x] 接口错误上报
