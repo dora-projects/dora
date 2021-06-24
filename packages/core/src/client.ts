@@ -154,8 +154,8 @@ export class Client implements BaseClient {
 
   addExtraInfo(event: EventLike): EventLike {
     event.appId = this.conf.appId;
-    event.appEnv = this.conf.appEnv;
-    event.appVersion = this.conf.appVersion;
+    event.env = this.conf.appEnv;
+    event.version = this.conf.appVersion;
 
     event.uid = this.user.uid;
 
