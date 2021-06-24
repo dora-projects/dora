@@ -5,12 +5,13 @@ Dora.init({
   serverUrl: "https://api.demo.cn/amp",
   appId: "wdssfar2312312dsad",
   appVersion: "0.0.1",
-  debug: true
+  debug: false
 });
 
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./view/App";
+import App from "./App";
+
 import "./g.css";
 
 ReactDOM.render(

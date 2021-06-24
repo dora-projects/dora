@@ -15,7 +15,6 @@ export interface BaseConfig {
 
   user?: userData;
   transfer?: (url: string, data: Data) => Promise<any>;
-  plugins?: Plugin[];
 
   [key: string]: any;
 }
@@ -86,6 +85,12 @@ export interface StatField {
 // pv uv 统计
 export type PageEvent = EventLike & PageField & DeviceField & UserField;
 
+// error
+export interface ErrorLike {
+  message?: string;
+  stack?: string;
+}
+
 // Api 错误
 export type ApiEvent = EventLike &
   PageField &
@@ -110,6 +115,8 @@ export interface BaseClient {
   use: (plugins: Plugin[]) => void;
   statistic: (data: StatField) => void;
   report: (pluginName: string, data: any) => Promise<void>;
+  setUser: (userId: string | number, userInfo?: { [key: string]: any }) => void;
+  getUser: () => userData;
 }
 
 export type Plugin = {

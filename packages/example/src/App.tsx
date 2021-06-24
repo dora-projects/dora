@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Dora from "@doras/browser";
-import Ajax from "./Ajax";
-import Error from "./Error";
-import HashChange from "./HashChange";
-import History from "./History";
+import Ajax from "./view/Ajax";
+import Error from "./view/Error";
+import HashChange from "./view/HashChange";
+import History from "./view/History";
+import CustomReport from "./view/CustomReport";
 
 function App() {
   React.useEffect(() => {
@@ -16,6 +17,7 @@ function App() {
       <Ajax />
       <HashChange />
       <History />
+      <CustomReport />
     </div>
   );
 }

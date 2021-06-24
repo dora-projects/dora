@@ -1,5 +1,6 @@
 import { Plugin } from "@doras/core";
 import { isString } from "@doras/shared";
+import { Error, Error_OnError } from "../types";
 
 export const ErrorPlugin = (conf?): Plugin => {
   return {
@@ -16,7 +17,8 @@ export const ErrorPlugin = (conf?): Plugin => {
         }
 
         report({
-          type: "error",
+          type: Error,
+          subType: Error_OnError,
           error: { msg, url, line, column, error }
         }).catch((e) => {});
 

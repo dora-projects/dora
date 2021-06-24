@@ -10,8 +10,7 @@
   "dependencies": {
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "@doras/core": "0.0.2-alpha.6+85a1fc3.0.1",
-    "@doras/browser": "0.0.2-alpha.6+85a1fc3"
+    "@doras/browser": "0.1.0"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",

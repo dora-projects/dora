@@ -5,6 +5,9 @@ export const DevicePlugin = (conf?): Plugin => {
     name: "@doras/browser-device-plugin",
     setup: ({ report }) => {},
     onEventBeforeSend: (event) => {
+      const { type } = event;
+      if (["performance", "stat"].includes(type)) return event;
+
       const deviceInfo: DeviceField = {
         screen: getScreen(),
         viewport: getViewPort(),

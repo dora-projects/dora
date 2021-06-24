@@ -1,5 +1,6 @@
 import { Plugin } from "@doras/core";
 import { getSelector } from "@doras/shared";
+import { Resource } from "../types";
 
 export const ResourcePlugin = (conf?): Plugin => {
   return {
@@ -30,7 +31,10 @@ export const ResourcePlugin = (conf?): Plugin => {
             selector,
             outerHTML
           };
-          report({ type: "resource", resource: detail }).catch((e) => {});
+          report({
+            type: Resource,
+            [Resource]: detail
+          }).catch((e) => {});
         },
         true
       );

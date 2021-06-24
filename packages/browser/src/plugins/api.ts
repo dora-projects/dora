@@ -1,5 +1,6 @@
 import { ApiField, Plugin } from "@doras/core";
 import { decorator, isString } from "@doras/shared";
+import { Api, Api_Xhr } from "../types";
 
 export const ApiPlugin = (conf?): Plugin => {
   return {
@@ -72,7 +73,7 @@ export const ApiPlugin = (conf?): Plugin => {
 
       function reportApiError(xhr) {
         const {
-          type = "ServerError",
+          type = "serverError",
           url,
           method,
           status,
@@ -90,7 +91,11 @@ export const ApiPlugin = (conf?): Plugin => {
           apiResponse: xhr.response
         };
 
-        report({ type: "api", apiError: errorReason }).catch(() => {});
+        report({
+          type: Api,
+          subType: Api_Xhr,
+          [Api]: errorReason
+        }).catch(() => {});
       }
     }
   };

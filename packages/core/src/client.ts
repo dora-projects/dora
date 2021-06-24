@@ -11,9 +11,9 @@ import {
   StatField,
   BaseClient,
   userData,
-  Transport
+  Transport,
+  Plugin
 } from "./types";
-import * as events from "events";
 
 export class Client implements BaseClient {
   readonly conf: BaseConfig;
@@ -32,12 +32,11 @@ export class Client implements BaseClient {
     cancel: (err?) => void;
   };
 
-  constructor(conf: BaseConfig) {
+  constructor(conf: BaseConfig, plugins: Plugin[]) {
     this.conf = conf;
     this.transfer = conf.transfer;
     this.user = {
       uid: conf.uid,
-
       // business user id
       bizUid: null,
       bizUser: null
@@ -49,8 +48,8 @@ export class Client implements BaseClient {
       onEventSendAfter: []
     };
 
-    if (conf.plugins) {
-      this.use(conf.plugins);
+    if (plugins && Array.isArray(plugins)) {
+      this.use(plugins);
     }
   }
 
@@ -103,8 +102,6 @@ export class Client implements BaseClient {
 
   async report(pluginName, originEvent: EventLike) {
     try {
-      log(`received ${pluginName} report data: `, originEvent);
-
       // add extra info
       const originEventExtra = this.addExtraInfo(originEvent);
 
@@ -114,11 +111,22 @@ export class Client implements BaseClient {
         originEventExtra
       );
 
-      // put event to queue
-      this.eventQueue.push(event);
+      const { type } = event;
+      if (!type) {
+        log("missing type!", event);
+        return;
+      }
 
-      // transfer to server
-      await this.batchTransfer();
+      // use img report  "performance", "stat"
+      if ([].includes(type)) {
+        // todo
+        console.log(event);
+      } else {
+        // put event to queue
+        this.eventQueue.push(event);
+        // transfer to server
+        await this.batchTransfer();
+      }
 
       // hook onEventSendAfter
       await executorSendAfter(this.pluginHooks.onEventSendAfter, event);
@@ -145,6 +153,10 @@ export class Client implements BaseClient {
   }
 
   addExtraInfo(event: EventLike): EventLike {
+    event.appId = this.conf.appId;
+    event.appEnv = this.conf.appEnv;
+    event.appVersion = this.conf.appVersion;
+
     event.uid = this.user.uid;
 
     event.buid = this.user.bizUid;

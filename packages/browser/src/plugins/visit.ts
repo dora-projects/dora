@@ -1,5 +1,6 @@
 import { Plugin } from "@doras/core";
 import { decorator, parseUrl } from "@doras/shared";
+import { Visit, Visit_Entry, Visit_PageView } from "../types";
 
 export const VisitPlugin = (conf?): Plugin => {
   return {
@@ -9,6 +10,7 @@ export const VisitPlugin = (conf?): Plugin => {
 
       // history
       historyListener();
+
       function historyListener() {
         decorator(window?.history, "pushState", historyReplacement);
         decorator(window?.history, "replaceState", historyReplacement);
@@ -17,6 +19,7 @@ export const VisitPlugin = (conf?): Plugin => {
           const current = window?.location?.href;
           urlChange(lastHref, current);
         });
+
         function historyReplacement(original: () => void) {
           return function (data: any, title: string, url?: string) {
             if (url) {
@@ -29,6 +32,7 @@ export const VisitPlugin = (conf?): Plugin => {
 
       // hash
       window.addEventListener("hashchange", hashListener, true);
+
       function hashListener(e: HashChangeEvent) {
         const { oldURL, newURL } = e;
         urlChange(oldURL, newURL);
@@ -50,7 +54,11 @@ export const VisitPlugin = (conf?): Plugin => {
           from: formParsed.relative,
           to: toParsed.relative
         };
-        report({ type: "visit", router: visitData }).catch(() => {});
+        report({
+          type: Visit,
+          subType: Visit_PageView,
+          [Visit]: visitData
+        }).catch(() => {});
       }
 
       // dom ready 页面加载时统计
@@ -61,9 +69,11 @@ export const VisitPlugin = (conf?): Plugin => {
           from: undefined,
           to: parsed.relative
         };
-        report({ type: "visit", subType: "entry", router: visitData }).catch(
-          () => {}
-        );
+        report({
+          type: Visit,
+          subType: Visit_Entry,
+          [Visit]: visitData
+        }).catch(() => {});
       });
     }
   };
