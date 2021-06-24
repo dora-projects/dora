@@ -1,6 +1,6 @@
 {
   "name": "@doras/browser",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "main": "dist/main.js",
   "module": "dist/module.js",
@@ -17,7 +17,7 @@
     "dist/**/*"
   ],
   "dependencies": {
-    "@doras/core": "^0.1.0",
+    "@doras/core": "^0.1.1",
     "@doras/shared": "^0.1.0",
     "perfume.js": "^6.2.0"
   },
