@@ -5,6 +5,7 @@ export const Api_Xhr = "xhr";
 
 export const Error = "error";
 export const Error_OnError = "onerror";
+export const Error_UnhandledRejection = "unhandledrejection";
 export const Error_CustomCatch = "customCatch";
 
 export const Performance = "performance";

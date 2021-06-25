@@ -1,5 +1,5 @@
 import { Client, StatField, BaseClient, ErrorLike } from "@doras/core";
-import { log, infoLog, getGlobal, noop } from "@doras/shared";
+import { log, infoLog, getGlobal, isPrimitive, noop } from "@doras/shared";
 import { verifyBrowserConfig } from "./config";
 import { BrowserConfig, Error, Error_CustomCatch } from "./types";
 import { BrowserTransport } from "./transport";
@@ -12,9 +12,9 @@ import {
   ResourcePlugin,
   VisitPlugin
 } from "./plugins";
-import {} from "./types";
 
 const global = getGlobal();
+const version = "__buildVersion";
 
 const Browser = {
   _getClient: (): BaseClient => {
@@ -75,7 +75,7 @@ const Browser = {
     const c = new Client(conf, plugins);
     global.__dora__.client = c;
 
-    log("sdk ready!");
+    console.log(`%c Dora sdk v${version}`, `font-size:16px; color:green;`);
 
     return c;
   },
@@ -83,15 +83,26 @@ const Browser = {
     Browser._getClient().setUser(userId, userInfo);
   },
   catchException: (msg: string, e: ErrorLike) => {
-    const { message = null, stack = null } = e || {};
+    const detail = {
+      msg: msg,
+      error: null,
+      stack: null
+    };
+
+    if (!isPrimitive(e)) {
+      try {
+        detail.error = e.message;
+        detail.stack = e.stack;
+      } catch (_) {}
+    } else {
+      detail.error = e || null;
+    }
+
     Browser._getClient()
       .report("customReport", {
         type: Error,
         subType: Error_CustomCatch,
-        error: {
-          msg: message,
-          error: stack
-        }
+        error: detail
       })
       .then((r) => {});
   },

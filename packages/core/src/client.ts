@@ -15,6 +15,8 @@ import {
   Plugin
 } from "./types";
 
+const version = "__buildVersion";
+
 export class Client implements BaseClient {
   readonly conf: BaseConfig;
 
@@ -156,6 +158,7 @@ export class Client implements BaseClient {
     event.appId = this.conf.appId;
     event.env = this.conf.appEnv;
     event.version = this.conf.appVersion;
+    event.sdk = version;
 
     event.uid = this.user.uid;
 

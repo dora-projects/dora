@@ -134,7 +134,9 @@ function getUMD() {
 
 function getModule() {
   const configs = [...allPackages];
-  return configs.map((config) => makeRollupConfig({ ...config, type: "module" }));
+  return configs.map((config) =>
+    makeRollupConfig({ ...config, type: "module" })
+  );
 }
 
 function getAll() {

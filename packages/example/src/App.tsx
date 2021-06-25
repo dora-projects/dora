@@ -5,6 +5,7 @@ import Error from "./view/Error";
 import HashChange from "./view/HashChange";
 import History from "./view/History";
 import CustomReport from "./view/CustomReport";
+import PromiseError from "./view/PromiseError";
 
 function App() {
   React.useEffect(() => {
@@ -18,6 +19,7 @@ function App() {
       <HashChange />
       <History />
       <CustomReport />
+      <PromiseError />
     </div>
   );
 }

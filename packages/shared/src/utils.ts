@@ -95,7 +95,7 @@ export function timeout(ms) {
   p.start = () =>
     new Promise(function (resolve, reject) {
       p.timer = setTimeout(function () {
-        resolve();
+        resolve(undefined);
       }, ms);
 
       p.cancel = function (err) {
@@ -122,4 +122,8 @@ export function createUUID() {
 
   const uuid = s.join("");
   return uuid;
+}
+
+export function isPrimitive(wat: any): boolean {
+  return wat === null || (typeof wat !== "object" && typeof wat !== "function");
 }
