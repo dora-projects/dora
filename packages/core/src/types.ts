@@ -58,13 +58,13 @@ export interface PerfField {
 
 // 网络
 export interface ApiField {
-  apiType: "server_error" | "timeout" | "error";
-  apiUrl: string;
-  apiMethod: string;
-  apiStatus: string;
-  apiTimeout: number;
-  apiRequest: string;
-  apiResponse: string;
+  type: "server_error" | "timeout" | "error";
+  url: string;
+  method: string;
+  status: string;
+  timeout: number;
+  request: string;
+  response: string;
 }
 
 // 错误

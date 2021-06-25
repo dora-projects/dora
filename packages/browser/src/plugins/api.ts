@@ -82,13 +82,13 @@ export const ApiPlugin = (conf?): Plugin => {
         } = xhr.__dora__;
 
         const errorReason: ApiField = {
-          apiType: type,
-          apiUrl: url,
-          apiMethod: method,
-          apiTimeout: timeout,
-          apiStatus: status,
-          apiRequest: bodyData,
-          apiResponse: xhr.response
+          type,
+          url,
+          method,
+          timeout,
+          status,
+          request: bodyData,
+          response: xhr.response
         };
 
         report({

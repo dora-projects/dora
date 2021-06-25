@@ -66,9 +66,7 @@ const analyticsTool = {
         type: Performance,
         subType: Performance_Resource,
         [Performance]: {
-          initiatorType,
-          name,
-          duration: trans(duration, 3)
+          [initiatorType]: { name, duration: trans(duration, 3) }
         }
       });
     }
