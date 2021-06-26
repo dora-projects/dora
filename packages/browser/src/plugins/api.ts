@@ -19,6 +19,8 @@ export const ApiPlugin = (conf?): Plugin => {
         return function (...args: any[]): void {
           const xhr = this;
           decorator(xhr, "onreadystatechange", replaceOnreadystatechange);
+          xhr.addEventListener("timeout", () => xhrErrHandler("timeout"));
+          xhr.addEventListener("error", () => xhrErrHandler("error"));
 
           const [method, url] = args;
           xhr.__dora__ = { method: method, url: url };
@@ -29,34 +31,27 @@ export const ApiPlugin = (conf?): Plugin => {
             xhr.__dora_own_request__ = true;
           }
 
-          xhr.addEventListener("timeout", () => xhrErrHandler("timeout"));
-          xhr.addEventListener("error", () => xhrErrHandler("error"));
-
           function xhrErrHandler(t): void {
             xhr.__dora__.type = t;
             if (xhr.__dora_own_request__) return;
             reportApiError(xhr);
           }
 
-          return originalOpen.apply(xhr, args);
-        };
-      }
-
-      function replaceOnreadystatechange(original): Function {
-        return function (...readyStateArgs: any[]): void {
-          const xhr = this;
-
-          if (xhr.readyState === 4) {
-            xhr.__dora__.status = xhr.status;
-
-            if (xhr.status >= 500) {
-              // sdk 错误不上报
-              if (xhr.__dora_own_request__) return;
-              reportApiError(xhr);
-            }
+          function replaceOnreadystatechange(originalStatechange): Function {
+            return function (...readyStateArgs: any[]): void {
+              if (xhr.readyState === 4) {
+                xhr.__dora__.status = xhr.status;
+                if (xhr.status >= 500) {
+                  // sdk 错误不上报
+                  if (xhr.__dora_own_request__) return;
+                  reportApiError(xhr);
+                }
+              }
+              originalStatechange?.apply(xhr, readyStateArgs);
+            };
           }
 
-          return original.apply(xhr, readyStateArgs);
+          return originalOpen.apply(xhr, args);
         };
       }
 
