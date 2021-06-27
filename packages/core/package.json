@@ -29,5 +29,6 @@
   "bugs": {
     "url": "https://github.com/nanzm/dora/issues"
   },
-  "homepage": "https://github.com/nanzm/dora#readme"
+  "homepage": "https://github.com/nanzm/dora#readme",
+  "gitHead": "2765c5e91cd4e0c854e44cc89bbc5e403c21e9ec"
 }
