@@ -1,12 +1,12 @@
 import React from "react";
-import Dora from "@doras/browser";
+import { Browser } from "@doras/browser";
 
 function CustomReport() {
   const handleError = () => {
     try {
       throw new Error("test custom report");
     } catch (e) {
-      Dora.catchException("呵呵哒", e);
+      Browser.catchException("呵呵哒", e);
     }
   };
   return (

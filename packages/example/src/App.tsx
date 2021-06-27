@@ -1,5 +1,5 @@
 import React from "react";
-import Dora from "@doras/browser";
+import { Browser } from "@doras/browser";
 import Ajax from "./view/Ajax";
 import Error from "./view/Error";
 import HashChange from "./view/HashChange";
@@ -9,7 +9,7 @@ import PromiseError from "./view/PromiseError";
 
 function App() {
   React.useEffect(() => {
-    Dora.setUser("12312312312", { userName: "王小明", age: 18 });
+    Browser.setUser("12312312312", { userName: "王小明", age: 18 });
   }, []);
 
   return (

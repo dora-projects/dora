@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Dora from "@doras/browser";
+import { Browser } from "@doras/browser";
 
 function Stat() {
   const handleStat = () => {
-    Dora.stat({
+    Browser.stat({
       statAction: "click",
       statCategory: "2020",
       statLabel: "test",

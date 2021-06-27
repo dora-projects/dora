@@ -1,6 +1,6 @@
-import Dora from "@doras/browser";
+import { Browser } from "@doras/browser";
 
-Dora.init({
+Browser.init({
   appEnv: "dev",
   serverUrl: "https://api.demo.cn/amp",
   appId: "wdssfar2312312dsad",

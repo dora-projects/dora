@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Dora from "@doras/browser";
 
 function Ajax() {
   const handleError = () => {
