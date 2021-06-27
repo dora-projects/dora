@@ -17,6 +17,7 @@
     "test": "jest",
     "test-cov": "jest --coverage",
     "ci": "lerna bootstrap && npm run build && npm run b:types && npm run test-cov",
+    "prepublishOnly": "npm run build-all",
     "publish": "lerna publish --no-private",
     "lint": "eslint --fix"
   },
