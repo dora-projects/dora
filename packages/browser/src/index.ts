@@ -16,7 +16,7 @@ import {
 const global = getGlobal();
 const version = "__buildVersion";
 
-const Browser = {
+export const Browser = {
   _getClient: (): BaseClient => {
     if (!global.__dora__?.client) {
       log("please call init first.");
@@ -110,6 +110,4 @@ const Browser = {
     Browser._getClient().statistic(data);
   }
 };
-
-export default Browser;
 export * from "./plugins";
