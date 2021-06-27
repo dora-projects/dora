@@ -127,3 +127,30 @@ export function createUUID() {
 export function isPrimitive(wat: any): boolean {
   return wat === null || (typeof wat !== "object" && typeof wat !== "function");
 }
+
+export function errorFormat(err): { error: string; stack: string } {
+  const detail = {
+    error: null,
+    stack: null
+  };
+
+  if (isPrimitive(err)) {
+    detail.error = err || null;
+  } else {
+    try {
+      detail.error = err.message;
+      detail.stack = err.stack;
+    } catch (_) {}
+  }
+
+  if (!detail.error) {
+    detail.error = createSummary(detail.stack, 120);
+  }
+
+  return detail;
+}
+
+export function createSummary(content: string, len: number): string {
+  if (!content || !isString(content)) return null;
+  return content.substr(0, len);
+}

@@ -1,5 +1,10 @@
 import { Plugin } from "@doras/core";
-import { isString, isPrimitive } from "@doras/shared";
+import {
+  isString,
+  isPrimitive,
+  createSummary,
+  errorFormat
+} from "@doras/shared";
 import { Error, Error_OnError, Error_UnhandledRejection } from "../types";
 
 export const ErrorPlugin = (): Plugin => {
@@ -18,17 +23,9 @@ export const ErrorPlugin = (): Plugin => {
         }
 
         // error format
-        const detail = {
-          error: null,
-          stack: null
-        };
-        if (!isPrimitive(error)) {
-          try {
-            detail.error = error.message;
-            detail.stack = error.stack;
-          } catch (_) {}
-        } else {
-          detail.error = error || null;
+        const detail = errorFormat(error);
+        if (!detail.error && !detail.stack) {
+          return;
         }
 
         report({
@@ -56,15 +53,8 @@ export const ErrorPlugin = (): Plugin => {
           }
         } catch (_) {}
 
-        let detail = { error: null, stack: null };
-        if (!isPrimitive(error)) {
-          try {
-            detail = { error: error.message, stack: error.stack };
-          } catch (_) {}
-        } else {
-          detail = { error, stack: null };
-        }
-
+        // error format
+        const detail = errorFormat(error);
         if (!detail.error && !detail.stack) {
           return;
         }

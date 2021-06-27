@@ -1,5 +1,5 @@
 import { Client, StatField, BaseClient, ErrorLike } from "@doras/core";
-import { log, infoLog, getGlobal, isPrimitive, noop } from "@doras/shared";
+import { log, infoLog, getGlobal, errorFormat, noop } from "@doras/shared";
 import { verifyBrowserConfig } from "./config";
 import { BrowserConfig, Error, Error_CustomCatch } from "./types";
 import { BrowserTransport } from "./transport";
@@ -83,26 +83,13 @@ export const Browser = {
     Browser._getClient().setUser(userId, userInfo);
   },
   catchException: (msg: string, e: ErrorLike) => {
-    const detail = {
-      msg: msg,
-      error: null,
-      stack: null
-    };
-
-    if (!isPrimitive(e)) {
-      try {
-        detail.error = e.message;
-        detail.stack = e.stack;
-      } catch (_) {}
-    } else {
-      detail.error = e || null;
-    }
+    const detail = errorFormat(e);
 
     Browser._getClient()
       .report("customReport", {
         type: Error,
         subType: Error_CustomCatch,
-        error: detail
+        error: { msg, ...detail }
       })
       .then((r) => {});
   },
@@ -110,4 +97,5 @@ export const Browser = {
     Browser._getClient().statistic(data);
   }
 };
+
 export * from "./plugins";
