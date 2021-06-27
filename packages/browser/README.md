@@ -10,9 +10,9 @@ npm i @doras/browser
 
 ```ts
 // 初始化
-import Dora from "@doras/browser";
+import { Browser } from "@doras/browser";
 
-Dora.init({
+Browser.init({
   appEnv: "dev",
   serverUrl: "https://api.demo.cn/amp",
   appId: "wdssfar2312312dsad",
@@ -21,10 +21,13 @@ Dora.init({
 });
 
 // 设置业务 user id
-Dora.setUser("52467", { userName: "王小明", age: 18 });
+Browser.setUser("52467", { userName: "王小明", age: 18 });
+
+// 主动捕获
+Browser.catchException("test msg", new Error("error test"));
 
 // 自定义打点统计
-Dora.stat({
+Browser.stat({
   statAction: "click",
   statCategory: "2020",
   statLabel: "test",
