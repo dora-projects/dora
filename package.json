@@ -7,8 +7,8 @@
     ]
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "example": "lerna exec --scope example -- yarn run dev",
+    "bootstrap": "yarn",
+    "example": "cd example && npm run dev",
     "watch": "cross-env NODE_ENV=development BUILD_TYPE=MODULE rollup -cw -m inline",
     "build": "cross-env BUILD_TYPE=MODULE rollup -c",
     "build-all": "lerna run b:types && cross-env BUILD_TYPE=ALL rollup -c",

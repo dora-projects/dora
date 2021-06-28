@@ -4,6 +4,7 @@ import Ajax from "./view/Ajax";
 import Error from "./view/Error";
 import HashChange from "./view/HashChange";
 import History from "./view/History";
+import InsertRes from "./view/InsertRes";
 import CustomReport from "./view/CustomReport";
 import PromiseError from "./view/PromiseError";
 
@@ -14,12 +15,13 @@ function App() {
 
   return (
     <div className="App">
-      <Error />
-      <Ajax />
-      <HashChange />
-      <History />
-      <CustomReport />
-      <PromiseError />
+      <Error/>
+      <Ajax/>
+      <HashChange/>
+      <History/>
+      <InsertRes/>
+      <CustomReport/>
+      <PromiseError/>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Browser } from "@doras/browser";
+import {Browser} from "@doras/browser";
 
 function CustomReport() {
   const handleError = () => {
