@@ -11,7 +11,7 @@
     "example": "cd example && npm run dev",
     "watch": "cross-env NODE_ENV=development BUILD_TYPE=MODULE rollup -cw -m inline",
     "build": "cross-env BUILD_TYPE=MODULE rollup -c",
-    "build-all": "cross-env BUILD_TYPE=ALL rollup -c",
+    "build-all": "cross-env BUILD_TYPE=ALL rollup -c rollup.config.ts",
     "clean": "lerna exec -- rm -rf dist && lerna clean",
     "b:types": "lerna run b:types",
     "test": "jest",
@@ -68,7 +68,7 @@
     "rollup-plugin-serve": "^1.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
-    "typescript": "^3.9.3"
+    "typescript": "^4.3.5"
   },
   "husky": {
     "hooks": {

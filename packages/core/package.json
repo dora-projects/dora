@@ -10,8 +10,7 @@
     "access": "public"
   },
   "scripts": {
-    "b:types": "tsc",
-    "b:types:watch": "tsc -w"
+    "b:types": "tsc --emitDeclarationOnly"
   },
   "files": [
     "dist/**/*"
