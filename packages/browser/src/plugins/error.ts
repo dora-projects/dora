@@ -1,10 +1,5 @@
 import { Plugin } from "@doras/core";
-import {
-  isString,
-  isPrimitive,
-  createSummary,
-  errorFormat
-} from "@doras/shared";
+import { isString, errorFormat } from "@doras/shared";
 import { Error, Error_OnError, Error_UnhandledRejection } from "../types";
 
 export const ErrorPlugin = (): Plugin => {

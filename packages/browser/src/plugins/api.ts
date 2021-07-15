@@ -1,5 +1,5 @@
 import { ApiField, Plugin } from "@doras/core";
-import { decorator, isString } from "@doras/shared";
+import { decorator } from "@doras/shared";
 import { Api, Api_Xhr } from "../types";
 
 export const ApiPlugin = (conf?): Plugin => {
