@@ -75,7 +75,14 @@ function configBuilder({ location, pkgJson }) {
       const plugins = [...commonPlugins];
 
       if (compress) {
-        plugins.push(terser(), filesize());
+        plugins.push(
+          terser({
+            output: {
+              comments: false
+            }
+          }),
+          filesize()
+        );
         file = path.join(location, "dist", "umd.min.js");
       }
 
