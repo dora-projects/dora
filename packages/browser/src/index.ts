@@ -15,11 +15,12 @@ import {
 
 const global = getGlobal();
 const version = "__buildVersion";
+const error = console.error || console.log;
 
 export const Browser = {
   _getClient: (): BaseClient => {
     if (!global.__dora__?.client) {
-      log("please call init first.");
+      error("please call init first.");
       return;
     }
     return global.__dora__?.client;
@@ -75,18 +76,18 @@ export const Browser = {
     const c = new Client(conf, plugins);
     global.__dora__.client = c;
 
-    console.log(`%c Dora sdk v${version}`, `font-size:16px; color:green;`);
+    console.log(`%c Dora sdk v${version}`, `font-size:12px; color:green;`);
 
     return c;
   },
   setUser: (userId: string, userInfo?: { [key: string]: any }) => {
-    Browser._getClient().setUser(userId, userInfo);
+    Browser._getClient()?.setUser(userId, userInfo);
   },
   catchException: (msg: string, e: ErrorLike) => {
     const detail = errorFormat(e);
 
     Browser._getClient()
-      .report("customReport", {
+      ?.report("customReport", {
         type: Error,
         subType: Error_CustomCatch,
         error: { msg, ...detail }
@@ -94,7 +95,7 @@ export const Browser = {
       .then((r) => {});
   },
   stat: (data: StatField) => {
-    Browser._getClient().statistic(data);
+    Browser._getClient()?.statistic(data);
   }
 };
 
