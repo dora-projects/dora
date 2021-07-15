@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "dist/main.js",
   "module": "dist/module.js",
-  "browser": "dist/browser.js",
+  "browser": "dist/umd.js",
   "types": "dist/types/index.d.ts",
   "publishConfig": {
     "access": "public"
