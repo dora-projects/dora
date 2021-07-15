@@ -7,6 +7,7 @@ import History from "./view/History";
 import InsertRes from "./view/InsertRes";
 import CustomReport from "./view/CustomReport";
 import PromiseError from "./view/PromiseError";
+import Stat from "./view/Stat";
 
 function App() {
   React.useEffect(() => {
@@ -15,13 +16,14 @@ function App() {
 
   return (
     <div className="App">
-      <Error/>
-      <Ajax/>
-      <HashChange/>
-      <History/>
-      <InsertRes/>
-      <CustomReport/>
-      <PromiseError/>
+      <Error />
+      <Ajax />
+      <HashChange />
+      <History />
+      <InsertRes />
+      <CustomReport />
+      <PromiseError />
+      <Stat />
     </div>
   );
 }
