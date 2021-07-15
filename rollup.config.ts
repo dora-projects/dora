@@ -2,9 +2,10 @@ import fs from "fs";
 import path from "path";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import babel from "@rollup/plugin-babel";
+// import babel from "@rollup/plugin-babel";
 import { terser } from "rollup-plugin-terser";
 import serve from "rollup-plugin-serve";
+import ts from "rollup-plugin-typescript2";
 import replace from "@rollup/plugin-replace";
 import filesize from "rollup-plugin-filesize";
 
@@ -26,16 +27,32 @@ function getAllPackages() {
 }
 
 function configBuilder({ location, pkgJson }) {
+  const tsPlugin = ts({
+    check: true,
+    tsconfig: path.resolve(location, "tsconfig.json"),
+    cacheRoot: path.resolve(__dirname, "node_modules/.rts2_cache"),
+    useTsconfigDeclarationDir: true,
+    tsconfigOverride: {
+      compilerOptions: {
+        sourceMap: true,
+        declaration: true,
+        declarationMap: true
+      },
+      exclude: ["**/__tests__", "test-dts"]
+    }
+  });
+
   const commonPlugins = [
     resolve({
       extensions: [".js", ".jsx", ".ts", ".tsx"],
       preferBuiltins: true
     }),
-    babel({
-      extensions: [".js", ".jsx", ".ts", ".tsx"],
-      babelHelpers: "runtime",
-      exclude: ["node_modules/**", "packages/**/node_modules/**"]
-    }),
+    // babel({
+    //   extensions: [".js", ".jsx", ".ts", ".tsx"],
+    //   babelHelpers: "runtime",
+    //   exclude: ["node_modules/**", "packages/**/node_modules/**"]
+    // }),
+    tsPlugin,
     commonjs(),
     replace({
       preventAssignment: true,
