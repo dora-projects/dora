@@ -13,11 +13,10 @@ npm i @doras/browser
 import { Browser } from "@doras/browser";
 
 Browser.init({
-  appEnv: "dev",
-  serverUrl: "https://api.demo.cn/amp",
-  appId: "wdssfar2312312dsad",
+  serverUrl: "http://127.0.0.1:8221/collect",
+  appId: "44992867-5a85-4804-849a-d525be1fa77c",
   appVersion: "0.0.1",
-  debug: false
+  appEnv: "dev",
 });
 
 // 设置业务 user id
@@ -28,17 +27,13 @@ Browser.catchException("test msg", new Error("error test"));
 
 // 自定义打点统计
 Browser.stat({
-  statAction: "click",
-  statCategory: "2020",
-  statLabel: "test",
-  statValue: 11
+  category: "2020",
+  action: "click",
+  label: "test",
+  value: 11
 });
-
 ```
-## server
-服务端代码
-
 
 ## issues
 
-https://github.com/nanzm/dora/issues
+https://github.com/dora-projects/dora/issues
