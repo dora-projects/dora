@@ -1,5 +1,6 @@
 import React from "react";
 import { Browser } from "@doras/browser";
+import Config from "./view/Config";
 import Ajax from "./view/Ajax";
 import Error from "./view/Error";
 import HashChange from "./view/HashChange";
@@ -15,16 +16,19 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <Error />
-      <Ajax />
-      <HashChange />
-      <History />
-      <InsertRes />
-      <CustomReport />
-      <PromiseError />
-      <Stat />
-    </div>
+    <>
+      <Config />
+      <div className="section-groups">
+        <Error />
+        <Ajax />
+        <HashChange />
+        <History />
+        <InsertRes />
+        <CustomReport />
+        <PromiseError />
+        <Stat />
+      </div>
+    </>
   );
 }
 

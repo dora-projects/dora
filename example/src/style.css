@@ -2,14 +2,29 @@
     box-sizing: border-box;
 }
 
-.section {
-    max-width: 400px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    margin-bottom: 20px;
+
+.section-groups {
+    display: flex;
+    flex-wrap: wrap;
 }
 
-.section button{
+.section {
+    width: 400px;
+    margin: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px 5px rgba(0,0,0,0.1);
+    border-radius: 4px;
+}
+
+.section h1 {
+    font-size: 16px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+
+.section button {
     cursor: pointer;
     background: #fff;
     color: black;
@@ -19,6 +34,6 @@
     margin-right: 10px;
 }
 
-.section button:active{
+.section button:active {
     background: #cccccc;
 }
