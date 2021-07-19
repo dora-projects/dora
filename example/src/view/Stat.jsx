@@ -9,10 +9,10 @@ function Stat() {
 
   const handleStat = () => {
     Browser.stat({
-      statAction: active,
-      statCategory: category,
-      statLabel: label,
-      statValue: val
+      action: active,
+      category: category,
+      label: label,
+      value: val
     });
   };
 
