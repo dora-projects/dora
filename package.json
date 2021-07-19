@@ -23,16 +23,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nanzm/dora.git"
+    "url": "git+https://github.com/dora-projects/dora.git"
   },
   "keywords": [],
   "description": "",
   "author": "nanzm",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nanzm/dora/issues"
+    "url": "https://github.com/dora-projects/dora/issues"
   },
-  "homepage": "https://github.com/nanzm/dora#readme",
+  "homepage": "https://github.com/dora-projects/dora#readme",
   "dependencies": {
     "@babel/runtime": "^7.14.0"
   },
