@@ -9,7 +9,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "@doras/browser": "^0.2.2",
+    "@doras/browser": "^0.3.0",
     "perfume.js": "^6.2.0",
     "react": "^17.0.2",
     "react-app-polyfill": "^2.0.0",
