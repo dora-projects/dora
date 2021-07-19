@@ -1,11 +1,19 @@
-import { isString, isBoolean, isEmpty, isObject, isUrl } from "@doras/shared";
+import {
+  isString,
+  isBoolean,
+  isEmpty,
+  isObject,
+  isPath,
+  isUrl
+} from "@doras/shared";
 
 export const BaseSchema = {
   serverUrl: {
     defaultValue: undefined,
-    message: "should be a url string",
+    message: "should be a url or path string",
     require: true,
-    validate: (value) => !isEmpty(value) && isString(value) && isUrl(value)
+    validate: (value) =>
+      (!isEmpty(value) && isString(value) && isPath(value)) || isUrl(value)
   },
   appId: {
     defaultValue: undefined,

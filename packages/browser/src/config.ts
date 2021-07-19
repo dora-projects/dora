@@ -1,5 +1,5 @@
 import { verifyConfig, BaseSchema } from "@doras/core";
-import { log, isEmptyObject } from "@doras/shared";
+import { isEmptyObject, error, debug } from "@doras/shared";
 import { BrowserConfig } from "./types";
 
 export const BrowserSchema = {};
@@ -16,8 +16,9 @@ export const verifyBrowserConfig = (
   let pass = true;
   if (!isEmptyObject(result.errors)) {
     pass = false;
-    log("配置错误：", JSON.stringify(result, null, 2));
+    error("verify config error：", result.errors);
   }
 
+  debug("final config:", result.config);
   return { config: result.config, pass };
 };

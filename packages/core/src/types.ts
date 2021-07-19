@@ -82,6 +82,13 @@ export interface StatField {
   statValue: any;
 }
 
+export interface SimpleStat {
+  category: string;
+  action: string;
+  label: string;
+  value: any;
+}
+
 // pv uv 统计
 export type PageEvent = EventLike & PageField & DeviceField & UserField;
 

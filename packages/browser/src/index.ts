@@ -1,5 +1,13 @@
-import { Client, StatField, BaseClient, ErrorLike } from "@doras/core";
-import { log, infoLog, getGlobal, errorFormat, noop } from "@doras/shared";
+import { Client, SimpleStat, BaseClient, ErrorLike } from "@doras/core";
+import {
+  userDebug,
+  error,
+  warn,
+  debug,
+  getGlobal,
+  errorFormat,
+  noop
+} from "@doras/shared";
 import { verifyBrowserConfig } from "./config";
 import { BrowserConfig, Error, Error_CustomCatch } from "./types";
 import { BrowserTransport } from "./transport";
@@ -15,7 +23,6 @@ import {
 
 const global = getGlobal();
 const version = "__buildVersion";
-const error = console.error || console.log;
 
 export const Browser = {
   _getClient: (): BaseClient => {
@@ -27,14 +34,13 @@ export const Browser = {
   },
   init: (userConfig: BrowserConfig) => {
     if (global.__dora__?.client) {
-      log("init has been called.");
+      warn("init has been called.");
       return global.__dora__?.client;
     }
 
     // log
-    global.__dora__ = {
-      logger: userConfig.debug ? infoLog : noop
-    };
+    const D = userConfig.debug ? userDebug : noop;
+    global.__dora__ = { logger: D };
 
     const defaultConfig: BrowserConfig = {
       appEnv: "",
@@ -76,8 +82,7 @@ export const Browser = {
     const c = new Client(conf, plugins);
     global.__dora__.client = c;
 
-    console.log(`%c Dora sdk v${version}`, `font-size:12px; color:green;`);
-
+    debug(`sdk v${version}`);
     return c;
   },
   setUser: (userId: string, userInfo?: { [key: string]: any }) => {
@@ -94,8 +99,14 @@ export const Browser = {
       })
       .then((r) => {});
   },
-  stat: (data: StatField) => {
-    Browser._getClient()?.statistic(data);
+  stat: (data: SimpleStat) => {
+    const { category, action, label, value } = data;
+    Browser._getClient()?.statistic({
+      statCategory: category,
+      statAction: action,
+      statLabel: label,
+      statValue: value
+    });
   }
 };
 

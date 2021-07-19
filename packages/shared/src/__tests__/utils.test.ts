@@ -1,4 +1,4 @@
-import { isEmptyObject, isString, parseUrl } from "..";
+import { isEmptyObject, isString, parseUrl, isPath } from "..";
 
 it("should isEmptyObject work", function () {
   expect(isEmptyObject(null)).toEqual(true);
@@ -11,6 +11,12 @@ it("should isEmptyObject work", function () {
 
 it("should isString work", function () {
   expect(isString("")).toEqual(true);
+});
+
+it("should isPath work", function () {
+  expect(isPath("/")).toEqual(true);
+  expect(isPath("/ab")).toEqual(true);
+  expect(isPath("ab")).toEqual(false);
 });
 
 it("should parseUrl work", function () {

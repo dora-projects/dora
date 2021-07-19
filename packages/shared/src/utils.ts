@@ -6,6 +6,10 @@ export function isUrl(value: any): boolean {
   return /^http(s)*.+/.test(value);
 }
 
+export function isPath(value: any): boolean {
+  return /^\/.*/.test(value);
+}
+
 export function isString(value: any): value is string {
   return typeof value === "string";
 }

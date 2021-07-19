@@ -1,5 +1,5 @@
 import { BaseClient, BaseConfig } from "./types";
-import { log } from "@doras/shared";
+import { debug } from "@doras/shared";
 
 export const executorSetups = (
   funcArray,
@@ -8,11 +8,11 @@ export const executorSetups = (
 ) => {
   funcArray.forEach(async (func) => {
     try {
-      log(`setup ${func.pluginName}`);
+      debug(`setup ${func.pluginName}`);
       const report = client.report.bind(client, func.pluginName);
       await func.call(null, { report, config });
     } catch (e) {
-      log(`setup catch error ${func.pluginName}`, e);
+      debug(`setup catch error ${func.pluginName}`, e);
     }
   });
 };
@@ -23,15 +23,15 @@ export const executorBeforeSend = async (funcArray, originEvent) => {
   for await (const func of funcArray) {
     try {
       const result = await func.call(null, acc);
-      log(`beforeSend ${func.pluginName}`, result);
+      debug(`beforeSend ${func.pluginName}`, result);
       acc = result;
 
       if (!result) {
-        log(`beforeSend break ${func.pluginName}`, result);
+        debug(`beforeSend break ${func.pluginName}`, result);
         break;
       }
     } catch (e) {
-      log(`beforeSend catch error ${func.pluginName}`, e);
+      debug(`beforeSend catch error ${func.pluginName}`, e);
       acc = null;
       break;
     }
@@ -45,14 +45,14 @@ export const executorSendAfter = async (funcArray, event) => {
   for await (const func of funcArray) {
     try {
       const result = await func.call(null, event);
-      log(`beforeSend hook executed ${func.pluginName}`, result);
+      debug(`beforeSend hook executed ${func.pluginName}`, result);
 
       if (!result) {
-        log(`beforeSend get false ${func.pluginName}`, result);
+        debug(`beforeSend get false ${func.pluginName}`, result);
         break;
       }
     } catch (e) {
-      log(`beforeSend catch error ${func.pluginName}`, e);
+      debug(`beforeSend catch error ${func.pluginName}`, e);
       break;
     }
   }
