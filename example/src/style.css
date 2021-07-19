@@ -1,18 +1,55 @@
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 
+input {
+    padding: 5px;
+}
+
+.config-panel {
+    padding: 10px 0;
+    background: #f3f3f3;
+}
+
+.config-panel .section {
+    background: #fff;
+    width: 600px;
+}
+
+.config-panel .form-item {
+    margin-bottom: 10px;
+}
+
+.config-panel .form-item input {
+    width: 300px;
+}
+
+.config-panel .form-item.submit {
+    padding-left: 100px;
+    padding-top: 30px;
+}
+
+.config-panel label:first-child {
+    display: inline-block;
+    width: 90px;
+    text-align: right;
+    margin-right: 10px;
+}
+
 .section-groups {
+    padding: 20px 0;
     display: flex;
     flex-wrap: wrap;
 }
+
 
 .section {
     width: 400px;
     margin: 10px;
     padding: 20px;
-    box-shadow: 0 2px 8px 5px rgba(0,0,0,0.1);
     border-radius: 4px;
 }
 
