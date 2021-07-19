@@ -11,19 +11,18 @@ import filesize from "rollup-plugin-filesize";
 
 const { BUILD_TYPE, NODE_ENV } = process.env;
 
-function getAllPackages() {
+function getPackages() {
+  const packages = ["shared", "core", "browser"];
   const rootPath = path.join(__dirname, "packages");
-  return fs
-    .readdirSync(rootPath)
-    .map((dir) => path.join(rootPath, dir))
+  return packages
+    .map((pkg) => path.join(rootPath, pkg))
     .filter((dir) => fs.statSync(dir).isDirectory())
     .map((location) => {
       return {
         location: location,
         pkgJson: require(path.resolve(location, "package.json"))
       };
-    })
-    .filter(({ pkgJson }) => !pkgJson.private);
+    });
 }
 
 function configBuilder({ location, pkgJson }) {
@@ -123,14 +122,14 @@ function configBuilder({ location, pkgJson }) {
 }
 
 function getUMD() {
-  const pkgConfig = getAllPackages();
+  const pkgConfig = getPackages();
   const compress = pkgConfig.map((pkg) => configBuilder(pkg).umd(true));
   const unCompress = pkgConfig.map((pkg) => configBuilder(pkg).umd(false));
   return [...compress, ...unCompress];
 }
 
 function getModule() {
-  const pkgConfig = getAllPackages();
+  const pkgConfig = getPackages();
   return pkgConfig.map((pkg) => configBuilder(pkg).module());
 }
 
