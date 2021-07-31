@@ -13,7 +13,7 @@ import { BrowserConfig, Error, Error_CustomCatch } from "./types";
 import { BrowserTransport } from "./transport";
 import { genUid } from "./user";
 import {
-  ApiPlugin,
+  XhrPlugin,
   DevicePlugin,
   ErrorPlugin,
   PerfumePlugin,
@@ -66,7 +66,7 @@ export const Browser = {
 
     // plugins
     const plugins = [
-      ApiPlugin(),
+      XhrPlugin(),
       DevicePlugin(),
       ErrorPlugin(),
       PerfumePlugin({

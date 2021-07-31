@@ -2,9 +2,9 @@ import { ApiField, Plugin } from "@doras/core";
 import { decorator } from "@doras/shared";
 import { Api, Api_Xhr } from "../types";
 
-export const ApiPlugin = (conf?): Plugin => {
+export const XhrPlugin = (conf?): Plugin => {
   return {
-    name: "@doras/browser-api-plugin",
+    name: "@doras/browser-xhr-plugin",
     setup: ({ report, config }) => {
       if (!("XMLHttpRequest" in window)) {
         return;

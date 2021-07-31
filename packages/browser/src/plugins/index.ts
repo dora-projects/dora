@@ -1,4 +1,4 @@
-export * from "./api";
+export * from "./xhr";
 export * from "./device";
 export * from "./error";
 export * from "./perfume";
