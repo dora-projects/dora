@@ -21,26 +21,26 @@ import {
   VisitPlugin
 } from "./plugins";
 
-const global = getGlobal();
+const g = getGlobal();
 const version = "__buildVersion";
 
 export const Browser = {
   _getClient: (): BaseClient => {
-    if (!global.__dora__?.client) {
+    if (!g.__dora__?.client) {
       error("please call init first.");
       return;
     }
-    return global.__dora__?.client;
+    return g.__dora__?.client;
   },
   init: (userConfig: BrowserConfig) => {
-    if (global.__dora__?.client) {
+    if (g.__dora__?.client) {
       warn("init has been called.");
-      return global.__dora__?.client;
+      return g.__dora__?.client;
     }
 
     // log
     const D = userConfig.debug ? userDebug : noop;
-    global.__dora__ = { logger: D };
+    g.__dora__ = { logger: D };
 
     const defaultConfig: BrowserConfig = {
       appEnv: "",
@@ -80,7 +80,7 @@ export const Browser = {
 
     // new Client
     const c = new Client(conf, plugins);
-    global.__dora__.client = c;
+    g.__dora__.client = c;
 
     debug(`sdk v${version}`);
     return c;
