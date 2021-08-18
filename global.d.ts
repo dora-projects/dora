@@ -1,6 +1,6 @@
 declare global {
   interface Window {
-    __dora__: any;
+    __DORA__: any;
   }
 }
 export {};

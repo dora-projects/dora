@@ -56,7 +56,8 @@ function configBuilder({ location, pkgJson }) {
     commonjs(),
     replace({
       preventAssignment: true,
-      __buildVersion: pkgJson.version
+      __buildVersion: pkgJson.version,
+      __buildTime: new Date().toLocaleString()
     })
   ];
 
@@ -125,11 +126,11 @@ function configBuilder({ location, pkgJson }) {
 
 function getProd() {
   const pkgConfig = getPackages();
-  const umdCompress = pkgConfig.map((pkg) => configBuilder(pkg).umd(true));
-  const umdUnCompress = pkgConfig.map((pkg) => configBuilder(pkg).umd(false));
   const module = pkgConfig.map((pkg) => configBuilder(pkg).module());
+  const umdUnCompress = pkgConfig.map((pkg) => configBuilder(pkg).umd(false));
+  const umdCompress = pkgConfig.map((pkg) => configBuilder(pkg).umd(true));
 
-  return [...umdCompress, ...umdUnCompress, ...module];
+  return [...module, ...umdUnCompress, ...umdCompress];
 }
 
 function getDev() {

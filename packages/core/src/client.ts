@@ -1,4 +1,4 @@
-import { timeout, createUUID, error, debug } from "@doras/shared";
+import { timeout, createUUID, logger } from "@doras/shared";
 import {
   executorSetups,
   executorBeforeSend,
@@ -114,14 +114,14 @@ export class Client implements BaseClient {
 
       const { type } = event;
       if (!type) {
-        debug("missing type!", event);
+        logger.debug("missing type!", event);
         return;
       }
 
       // use img report  "performance", "stat"
       // todo
       if ([].includes(type)) {
-        debug(event);
+        logger.debug(event);
       } else {
         // put event to queue
         this.eventQueue.push(event);
@@ -132,7 +132,7 @@ export class Client implements BaseClient {
       // hook onEventSendAfter
       await executorSendAfter(this.pluginHooks.onEventSendAfter, event);
     } catch (e) {
-      error(e);
+      logger.error(e);
     }
   }
 
@@ -151,7 +151,7 @@ export class Client implements BaseClient {
       // 置空
       this.eventQueue = [];
     } catch (e) {
-      if (e?.message?.indexOf("cancel") <= -1) error(e);
+      if (e?.message?.indexOf("cancel") <= -1) logger.error(e);
     }
   }
 

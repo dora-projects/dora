@@ -1,23 +1,52 @@
 import { getGlobal } from "./dom";
-import { noop } from "./utils";
 
-const prefix = "Dora";
-const fmt = `font-size:14px; color:#3578e5;`;
+const g = getGlobal();
+const PREFIX = "Dora";
 
 const C = console;
-const L = console.log;
-const W = console.warn || L;
-const E = console.error || L;
+const L = C.log;
+const W = C.warn || L;
+const E = C.error || L;
 
-export const info = L.bind(C, `%c ${prefix} info:`, fmt);
+class Logger {
+  private _enabled: boolean;
 
-export const warn = W.bind(C, `%c ${prefix} warn:`, fmt);
+  public constructor() {
+    this._enabled = true;
+  }
 
-export const error = E.bind(C, `%c ${prefix} error:`, fmt);
+  public disable(): void {
+    this._enabled = false;
+  }
 
-export const userDebug = L.bind(C, `%c ${prefix} debug:`, fmt);
+  public enable(): void {
+    this._enabled = true;
+  }
 
-export const debug = (...args) => {
-  const l = getGlobal().__dora__?.logger || noop;
-  return l.apply(null, args);
-};
+  public debug(...args: any[]): void {
+    if (!this._enabled) {
+      return;
+    }
+    L(`${PREFIX}[Debug]: ${args.join(" ")}`);
+  }
+
+  public warn(...args: any[]): void {
+    if (!this._enabled) {
+      return;
+    }
+    W(`${PREFIX}[Warn]: ${args.join(" ")}`);
+  }
+
+  public error(...args: any[]): void {
+    if (!this._enabled) {
+      return;
+    }
+    E(`${PREFIX}[Error]: ${args.join(" ")}`);
+  }
+}
+
+g.__DORA__ = g.__DORA__ || {};
+const logger =
+  (g.__DORA__.logger as Logger) || (g.__DORA__.logger = new Logger());
+
+export { logger };

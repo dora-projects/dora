@@ -1,5 +1,5 @@
 import { BaseClient, BaseConfig } from "./types";
-import { debug } from "@doras/shared";
+import { logger } from "@doras/shared";
 
 export const executorSetups = (
   funcArray,
@@ -8,11 +8,11 @@ export const executorSetups = (
 ) => {
   funcArray.forEach(async (func) => {
     try {
-      debug(`setup ${func.pluginName}`);
+      logger.debug(`setup ${func.pluginName}`);
       const report = client.report.bind(client, func.pluginName);
       await func.call(null, { report, config });
     } catch (e) {
-      debug(`setup catch error ${func.pluginName}`, e);
+      logger.debug(`setup catch error ${func.pluginName}`, e);
     }
   });
 };
@@ -23,15 +23,15 @@ export const executorBeforeSend = async (funcArray, originEvent) => {
   for await (const func of funcArray) {
     try {
       const result = await func.call(null, acc);
-      debug(`beforeSend ${func.pluginName}`, result);
+      logger.debug(`beforeSend ${func.pluginName}`, result);
       acc = result;
 
       if (!result) {
-        debug(`beforeSend break ${func.pluginName}`, result);
+        logger.debug(`beforeSend break ${func.pluginName}`, result);
         break;
       }
     } catch (e) {
-      debug(`beforeSend catch error ${func.pluginName}`, e);
+      logger.debug(`beforeSend catch error ${func.pluginName}`, e);
       acc = null;
       break;
     }
@@ -45,14 +45,14 @@ export const executorSendAfter = async (funcArray, event) => {
   for await (const func of funcArray) {
     try {
       const result = await func.call(null, event);
-      debug(`beforeSend hook executed ${func.pluginName}`, result);
+      logger.debug(`beforeSend hook executed ${func.pluginName}`, result);
 
       if (!result) {
-        debug(`beforeSend get false ${func.pluginName}`, result);
+        logger.debug(`beforeSend get false ${func.pluginName}`, result);
         break;
       }
     } catch (e) {
-      debug(`beforeSend catch error ${func.pluginName}`, e);
+      logger.debug(`beforeSend catch error ${func.pluginName}`, e);
       break;
     }
   }

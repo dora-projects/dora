@@ -1,13 +1,5 @@
 import { Client, SimpleStat, BaseClient, ErrorLike } from "@doras/core";
-import {
-  userDebug,
-  error,
-  warn,
-  debug,
-  getGlobal,
-  errorFormat,
-  noop
-} from "@doras/shared";
+import { getGlobal, errorFormat, logger } from "@doras/shared";
 import { verifyBrowserConfig } from "./config";
 import { BrowserConfig, Error, Error_CustomCatch } from "./types";
 import { BrowserTransport } from "./transport";
@@ -23,24 +15,25 @@ import {
 
 const g = getGlobal();
 const version = "__buildVersion";
+const bTime = "__buildTime";
 
 export const Browser = {
   _getClient: (): BaseClient => {
-    if (!g.__dora__?.client) {
-      error("please call init first.");
+    if (!g.__DORA__?.client) {
+      logger.error("please call init first.");
       return;
     }
-    return g.__dora__?.client;
+    return g.__DORA__?.client;
   },
   init: (userConfig: BrowserConfig) => {
-    if (g.__dora__?.client) {
-      warn("init has been called.");
-      return g.__dora__?.client;
+    if (g.__DORA__?.client) {
+      logger.warn("init has been called.");
+      return g.__DORA__?.client;
     }
 
-    // log
-    const D = userConfig.debug ? userDebug : noop;
-    g.__dora__ = { logger: D };
+    if (!userConfig.debug) {
+      logger.disable();
+    }
 
     const defaultConfig: BrowserConfig = {
       appEnv: "",
@@ -80,9 +73,9 @@ export const Browser = {
 
     // new Client
     const c = new Client(conf, plugins);
-    g.__dora__.client = c;
+    g.__DORA__.client = c;
 
-    debug(`sdk v${version}`);
+    logger.debug(`sdk v${version} build at ${bTime}`);
     return c;
   },
   setUser: (userId: string, userInfo?: { [key: string]: any }) => {
