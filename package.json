@@ -1,23 +1,20 @@
 {
-  "name": "root",
+  "name": "dora",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
-  },
+  "workspaces": [
+    "packages/*",
+    "example/*"
+  ],
   "scripts": {
     "bootstrap": "yarn",
-    "example": "cd example && npm run dev",
-    "watch": "cross-env NODE_ENV=development BUILD_TYPE=MODULE rollup -cw -m inline",
-    "build": "cross-env BUILD_TYPE=MODULE rollup -c",
-    "build-all": "cross-env BUILD_TYPE=ALL rollup -c rollup.config.ts",
-    "clean": "lerna exec -- rm -rf dist && lerna clean",
+    "demo": "yarn workspace create-react-app run start",
+    "dev": "cross-env BUILD_TYPE=dev rollup -cw rollup.config.ts",
+    "build": "cross-env BUILD_TYPE=prod rollup -c rollup.config.ts",
+    "clean": "lerna clean",
     "b:types": "lerna run b:types",
     "test": "jest",
     "test-cov": "jest --coverage",
-    "ci": "lerna bootstrap && npm run build && npm run b:types && npm run test-cov",
-    "prepublishOnly": "npm run build-all",
+    "prepublishOnly": "npm run build",
     "publish": "lerna publish --no-private",
     "lint": "eslint --fix"
   },

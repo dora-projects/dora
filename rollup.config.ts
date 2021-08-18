@@ -37,7 +37,7 @@ function configBuilder({ location, pkgJson }) {
         declaration: true,
         declarationMap: true
       },
-      exclude: ["**/__tests__", "test-dts"]
+      exclude: ["**/__tests__"]
     }
   });
 
@@ -115,32 +115,27 @@ function configBuilder({ location, pkgJson }) {
   };
 }
 
-function getUMD() {
+function getProd() {
   const pkgConfig = getPackages();
-  const compress = pkgConfig.map((pkg) => configBuilder(pkg).umd(true));
-  const unCompress = pkgConfig.map((pkg) => configBuilder(pkg).umd(false));
-  return [...compress, ...unCompress];
+  const umdCompress = pkgConfig.map((pkg) => configBuilder(pkg).umd(true));
+  const umdUnCompress = pkgConfig.map((pkg) => configBuilder(pkg).umd(false));
+  const module = pkgConfig.map((pkg) => configBuilder(pkg).module());
+
+  return [...umdCompress, ...umdUnCompress, ...module];
 }
 
-function getModule() {
+function getDev() {
   const pkgConfig = getPackages();
-  return pkgConfig.map((pkg) => configBuilder(pkg).module());
-}
-
-function getAll() {
-  return [...getModule(), ...getUMD()];
+  return pkgConfig.map((pkg) => configBuilder(pkg).umd(false));
 }
 
 let promises = [];
 switch (BUILD_TYPE) {
-  case "UMD":
-    promises.push(...getUMD());
+  case "dev":
+    promises.push(...getDev());
     break;
-  case "MODULE":
-    promises.push(...getModule());
-    break;
-  case "ALL":
-    promises.push(...getAll());
+  case "prod":
+    promises.push(...getProd());
     break;
   default:
     break;

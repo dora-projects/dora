@@ -2,8 +2,13 @@
   "npmClient": "yarn",
   "useWorkspaces": true,
   "version": "independent",
-  "bootstrap": {
-    "hoist": true
-  },
-  "loglevel": "verbose"
+  "command": {
+    "publish": {
+      "ignoreChanges": [
+        "**/__tests__/**",
+        "**/*.md"
+      ],
+      "message": "chore(release): publish"
+    }
+  }
 }
