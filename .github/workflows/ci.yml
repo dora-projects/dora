@@ -27,7 +27,7 @@ jobs:
         with:
           reporter: github-check
           eslint_flags: '.'
-      - run: yarn build-all
+      - run: yarn build
       - run: yarn test
         env:
           CI: true

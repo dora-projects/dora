@@ -8,6 +8,7 @@ import { terser } from "rollup-plugin-terser";
 import ts from "rollup-plugin-typescript2";
 import replace from "@rollup/plugin-replace";
 import filesize from "rollup-plugin-filesize";
+import camelcase from "camelcase";
 
 const { BUILD_TYPE } = process.env;
 
@@ -79,12 +80,19 @@ function configBuilder({ location, pkgJson }) {
         file = path.join(location, "dist", "umd.min.js");
       }
 
+      const globalName = camelcase(pkgJson.name);
+      const globals = {};
+      external.forEach((pkgName) => {
+        globals[pkgName] = camelcase(pkgName);
+      });
+
       return {
         input,
+        external: {},
         output: [
           {
             file,
-            name: "Dora",
+            name: globalName,
             format: "umd",
             sourcemap: true
           }
@@ -126,7 +134,7 @@ function getProd() {
 
 function getDev() {
   const pkgConfig = getPackages();
-  return pkgConfig.map((pkg) => configBuilder(pkg).umd(false));
+  return pkgConfig.map((pkg) => configBuilder(pkg).module());
 }
 
 let promises = [];
