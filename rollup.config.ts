@@ -135,7 +135,8 @@ function getProd() {
 
 function getDev() {
   const pkgConfig = getPackages();
-  return pkgConfig.map((pkg) => configBuilder(pkg).module());
+  const umdUnCompress = pkgConfig.map((pkg) => configBuilder(pkg).umd(false));
+  return [...umdUnCompress];
 }
 
 let promises = [];
