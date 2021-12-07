@@ -19,9 +19,5 @@ export const Visit_PageView = "pageView";
 export const Visit_Entry = "entry";
 
 export type BrowserConfig = BaseConfig & {
-  pref?: {
-    enable: boolean;
-    scriptTiming: boolean;
-    xhrTiming: boolean;
-  };
+  disableDefaultPlugins?: boolean;
 };

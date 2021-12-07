@@ -16,6 +16,8 @@ export interface BaseConfig {
   user?: userData;
   transfer?: (url: string, data: Data) => Promise<any>;
 
+  beforeEventSend: (e: EventLike) => EventLike;
+
   [key: string]: any;
 }
 
@@ -120,7 +122,6 @@ export type StatEvent = EventLike & PageField & StatField & UserField;
 
 export interface BaseClient {
   use: (plugins: Plugin[]) => void;
-  statistic: (data: StatField) => void;
   report: (pluginName: string, data: any) => Promise<void>;
   setUser: (userId: string | number, userInfo?: { [key: string]: any }) => void;
   getUser: () => userData;

@@ -6,7 +6,7 @@ import {
   Performance_Resource
 } from "../types";
 
-export const PerfumePlugin = (conf: {
+export const PerfumePlugin = (conf?: {
   enable: boolean;
   scriptTiming: boolean;
   xhrTiming: boolean;
@@ -14,7 +14,7 @@ export const PerfumePlugin = (conf: {
   return {
     name: "@doras/perfume-plugin",
     setup: ({ report }) => {
-      const isOpenResourceTiming = conf.scriptTiming || conf.xhrTiming;
+      const isOpenResourceTiming = conf.scriptTiming || conf.xhrTiming || true;
       if (!conf.enable) return;
 
       new Perfume({

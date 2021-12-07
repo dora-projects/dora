@@ -23,8 +23,10 @@ export const ResourcePlugin = (conf?): Plugin => {
           const detail = {
             id: target && target.id,
             className: target && target.className,
+            // @ts-ignore
             name: target && target.name,
             tagName: target && target.tagName,
+            // @ts-ignore
             src: target && target.src,
             // https://developer.mozilla.org/zh-CN/docs/Web/API/Node/nodeType
             nodeType: target && target.nodeType,

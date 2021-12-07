@@ -1,4 +1,4 @@
-import { timeout, createUUID, logger } from "@doras/shared";
+import { createUUID, logger } from "@doras/shared";
 import {
   executorSetups,
   executorBeforeSend,
@@ -7,7 +7,6 @@ import {
 import {
   BaseConfig,
   EventLike,
-  StatField,
   BaseClient,
   userData,
   Transport,
@@ -26,12 +25,7 @@ export class Client implements BaseClient {
     onEventSendAfter: any[];
   };
 
-  private eventQueue: EventLike[];
-  private delay: {
-    start: () => Promise<any>;
-    timer: any;
-    cancel: (err?) => void;
-  };
+  private events: EventLike[];
 
   constructor(conf: BaseConfig, plugins: Plugin[]) {
     this.conf = conf;
@@ -42,7 +36,7 @@ export class Client implements BaseClient {
       bizUid: null,
       bizUser: null
     };
-    this.eventQueue = [];
+    this.events = [];
 
     this.pluginHooks = {
       onEventBeforeSend: [],
@@ -97,16 +91,9 @@ export class Client implements BaseClient {
     executorSetups(result.pluginSetups, client, this.conf);
   }
 
-  statistic(data: StatField) {
-    this.report("stat", { type: "stat", ...data }).then(() => {});
-  }
-
   async report(pluginName, originEvent: EventLike) {
     try {
-      // add extra info
       const originEventExtra = this.addExtraInfo(originEvent);
-
-      // hook onEventBeforeSend
       const event = await executorBeforeSend(
         this.pluginHooks.onEventBeforeSend,
         originEventExtra
@@ -118,38 +105,19 @@ export class Client implements BaseClient {
         return;
       }
 
-      // use img report  "performance", "stat"
-      // todo
-      if ([].includes(type)) {
-        logger.debug(event);
-      } else {
-        // put event to queue
-        this.eventQueue.push(event);
-        // transfer to server
-        await this.batchTransfer();
-      }
+      this.events.push(event);
+      await this.commit();
 
-      // hook onEventSendAfter
       await executorSendAfter(this.pluginHooks.onEventSendAfter, event);
     } catch (e) {
       logger.error(e);
     }
   }
 
-  async batchTransfer() {
+  async commit() {
     try {
-      if (this.delay?.timer) {
-        this.delay?.cancel();
-      }
-
-      // 600 毫秒内只发送一次
-      this.delay = timeout(600);
-      await this.delay?.start();
-
-      await this.transfer(this.conf.serverUrl, this.eventQueue);
-
-      // 置空
-      this.eventQueue = [];
+      await this.transfer(this.conf.serverUrl, this.events);
+      this.events = [];
     } catch (e) {
       if (e?.message?.indexOf("cancel") <= -1) logger.error(e);
     }
