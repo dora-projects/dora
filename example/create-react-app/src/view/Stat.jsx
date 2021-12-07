@@ -1,5 +1,4 @@
 import React from "react";
-import { Browser } from "@doras/browser";
 
 function Stat() {
   const [active, setActive] = React.useState("click");
@@ -8,12 +7,12 @@ function Stat() {
   const [val, setValue] = React.useState(11);
 
   const handleStat = () => {
-    Browser.stat({
-      action: active,
-      category: category,
-      label: label,
-      value: val
-    });
+    // Browser.stat({
+    //   action: active,
+    //   category: category,
+    //   label: label,
+    //   value: val
+    // });
   };
 
   return (

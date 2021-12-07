@@ -1,6 +1,14 @@
 import React from "react";
 import { setConfig, remove } from "../config";
-import { defaultConfig } from "../lib/dora";
+// import { defaultConfig } from "../lib/dora";
+
+const defaultConfig ={
+  serverUrl: "http://127.0.0.1:8221/collect",
+  appId: "44992867-5a85-4804-849a-d525be1fa77c",
+  appVersion: "0.0.1",
+  appEnv: "dev",
+  debug: false
+}
 
 function Config() {
   return (

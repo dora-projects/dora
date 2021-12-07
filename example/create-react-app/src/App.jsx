@@ -1,5 +1,5 @@
 import React from "react";
-import { Browser } from "@doras/browser";
+// import { Browser } from "@doras/browser";
 import Config from "./view/Config";
 import Ajax from "./view/Ajax";
 import Error from "./view/Error";
@@ -12,7 +12,7 @@ import Stat from "./view/Stat";
 
 function App() {
   React.useEffect(() => {
-    Browser.setUser("12312312312", { userName: "王小明", age: 18 });
+    // Browser.setUser("12312312312", { userName: "王小明", age: 18 });
   }, []);
 
   return (
