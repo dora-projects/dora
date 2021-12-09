@@ -3,7 +3,6 @@ import { logger } from "@doras/shared";
 import { verifyBrowserConfig } from "./config";
 import { BrowserConfig } from "./types";
 import { BrowserTransport } from "./transport";
-import { genUid } from "./user";
 
 import {
   ResourcePlugin,
@@ -13,6 +12,7 @@ import {
   PerfumePlugin,
   VisitPlugin
 } from "./plugins";
+import { CoreApi } from "@doras/core/src";
 
 const defaultPlugins = [
   ResourcePlugin(),
@@ -25,23 +25,25 @@ const defaultPlugins = [
 
 const defaultConfig: BrowserConfig = {
   serverUrl: "",
+
   appEnv: "",
-  appId: "",
+  appKey: "",
   appVersion: "",
+
   debug: false,
-  uid: genUid(),
-  transfer: BrowserTransport
+  notify: BrowserTransport
 };
 
 const version = "__buildVersion";
 const bTime = "__buildTime";
 
-export class Api {
+export class Browser extends CoreApi {
   private app: Client | null = null;
   private readonly conf: BrowserConfig | null = null;
   private readonly plugins: Plugin[];
 
   constructor(readonly options: BrowserConfig) {
+    super();
     if (!options.debug) {
       logger.disable();
     }

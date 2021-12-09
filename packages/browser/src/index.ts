@@ -1,2 +1,2 @@
-export { Api as Dora } from "./api";
+export { Browser as Dora } from "./api";
 export * from "./plugins";

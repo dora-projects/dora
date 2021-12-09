@@ -1,4 +1,4 @@
-export { Client } from "./client";
-
-export * from "./types";
+export * from "./api";
 export * from "./config";
+export * from "./plugin";
+export * from "./transport";

@@ -13,7 +13,7 @@ import camelcase from "camelcase";
 const { BUILD_TYPE } = process.env;
 
 function getPackages() {
-  const packages = ["shared", "core", "browser"];
+  const packages = ["types", "shared", "core", "browser"];
   const rootPath = path.join(__dirname, "packages");
   return packages
     .map((pkg) => path.join(rootPath, pkg))
