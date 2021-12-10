@@ -4,19 +4,18 @@ export interface Data {
   [key: string]: any;
 }
 
-export interface BaseConfig {
+export interface Config {
   serverUrl: string;
 
   appKey: string;
   appEnv: string;
   appVersion: string;
 
-  notify: (url: string, data: Data) => Promise<any>;
-
   debug?: boolean;
   sampleRate?: number;
   maxBreadcrumbs?: number;
   user?: UserInfo;
+  notify?: (url: string, data: Data) => Promise<any>;
   beforeSend?: (e: EventLike) => EventLike;
 }
 
@@ -117,7 +116,42 @@ export type StatEvent = EventLike&PageField&StatField&UserField;
 
 export interface UserInfo {
   userId: string|number|null;
-  anonymousId: string|null;
+  userName: string|null;
 
   [key: string]: any;
+}
+
+export interface ClientContext {
+  appKey: string;
+  release: string;
+  environment: string;
+  anonymousId: string;
+  sessionId: string;
+  sdk: {
+    name: string;
+    version: string;
+  };
+  user?: UserInfo;
+}
+
+export interface Breadcrumb {
+  id: string;
+  category: string;
+  data: any;
+  message: string;
+  timestamp: string;
+  type: string;
+}
+
+export interface StacktraceFrames {
+  colno: number,
+  lineno: number,
+  filename: string,
+  function: string,
+}
+
+export interface EventRequest {
+  referer: string,
+  ua: string,
+  url: string,
 }

@@ -1,5 +1,2 @@
-# @doras/core
-
-```shell
-npm i @doras/core
-```
+# core
+sdk common api

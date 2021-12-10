@@ -1,12 +1,12 @@
-import { CoreTransport } from "@doras/core";
+import { Transport } from "@doras/core";
 
-export class BrowserTransport extends CoreTransport {
+export class BrowserTransport extends Transport {
   beforeSend(e) {
     return e;
   }
 
   send(url: string, data: any) {
-    new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       if (navigator.sendBeacon) {
         const json = JSON.stringify(data);
         const result = navigator.sendBeacon(url, json);

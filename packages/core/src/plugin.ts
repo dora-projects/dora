@@ -1,5 +1,12 @@
-export abstract class CorePlugin {
+import { Config } from "@doras/types";
+
+export type PluginRegisterFunc = (args: {
+  report: (e) => void;
+  clientConfig: Config;
+}) => void;
+
+export interface Plugin {
   name: string;
-  register: () => void;
+  register: PluginRegisterFunc;
   unregister: () => void;
 }

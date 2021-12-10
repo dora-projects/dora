@@ -158,3 +158,13 @@ export function createSummary(content: string, len: number): string {
   if (!content || !isString(content)) return null;
   return content.substr(0, len);
 }
+
+export function numFixed(num: any, digit: number): number {
+  if (isNaN(num)) return 0;
+  return +num.toFixed(digit);
+}
+
+export function isContains(obj: Record<string, any>, keys: string[]) {
+  const objKeys = Object.keys(obj);
+  return keys.every((k) => objKeys.includes(k));
+}

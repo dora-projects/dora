@@ -1,11 +1,11 @@
-import { ApiField, Plugin } from "@doras/core";
+import { Plugin, constant } from "@doras/core";
 import { decorator } from "@doras/shared";
-import { Api, Api_Xhr } from "../types";
+import { ApiField } from "@doras/types";
 
-export const XhrPlugin = (conf?): Plugin => {
+export function XhrPlugin(): Plugin {
   return {
-    name: "@doras/browser-xhr-plugin",
-    setup: ({ report, config }) => {
+    name: "xhr",
+    register: ({ report, clientConfig }) => {
       if (!("XMLHttpRequest" in window)) {
         return;
       }
@@ -27,7 +27,7 @@ export const XhrPlugin = (conf?): Plugin => {
           xhr.__dora__.timeout = xhr.timeout;
 
           // sdk request
-          if (url.indexOf(config.serverUrl) > -1) {
+          if (url.indexOf(clientConfig.serverUrl) > -1) {
             xhr.__dora_own_request__ = true;
           }
 
@@ -87,11 +87,12 @@ export const XhrPlugin = (conf?): Plugin => {
         };
 
         report({
-          type: Api,
-          subType: Api_Xhr,
-          [Api]: errorReason
-        }).catch(() => {});
+          type: constant.API,
+          subtype: constant.API_XHR,
+          data: errorReason
+        });
       }
-    }
+    },
+    unregister() {}
   };
-};
+}

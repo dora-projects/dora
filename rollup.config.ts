@@ -13,8 +13,10 @@ import camelcase from "camelcase";
 const { BUILD_TYPE } = process.env;
 
 function getPackages() {
+  // const packages = ["types", "shared", "core"];
   const packages = ["types", "shared", "core", "browser"];
   const rootPath = path.join(__dirname, "packages");
+
   return packages
     .map((pkg) => path.join(rootPath, pkg))
     .filter((dir) => fs.statSync(dir).isDirectory())
@@ -55,8 +57,9 @@ function configBuilder({ location, pkgJson }) {
     commonjs(),
     replace({
       preventAssignment: true,
-      __buildVersion: pkgJson.version,
-      __buildTime: new Date().toLocaleString()
+      __PkgName: pkgJson.name,
+      __PkgVersion: pkgJson.version,
+      __BuildTime: new Date().toLocaleString()
     })
   ];
 
@@ -134,8 +137,9 @@ function getProd() {
 
 function getDev() {
   const pkgConfig = getPackages();
+  const module = pkgConfig.map((pkg) => configBuilder(pkg).module());
   const umdUnCompress = pkgConfig.map((pkg) => configBuilder(pkg).umd(false));
-  return [...umdUnCompress];
+  return [...module, ...umdUnCompress];
 }
 
 let promises = [];

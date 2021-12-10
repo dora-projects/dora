@@ -1,11 +1,10 @@
-import { Plugin } from "@doras/core";
+import { Plugin, constant } from "@doras/core";
 import { isString, errorFormat } from "@doras/shared";
-import { Error, Error_OnError, Error_UnhandledRejection } from "../types";
 
-export const ErrorPlugin = (): Plugin => {
+export function ErrorPlugin(): Plugin {
   return {
-    name: "@doras/browser-error-plugin",
-    setup: ({ report }) => {
+    name: "error",
+    register: ({ report }) => {
       // onerror
       const oldOnErrorHandler = window.onerror;
       window.onerror = function (msg: string, url, line, column, error) {
@@ -24,10 +23,10 @@ export const ErrorPlugin = (): Plugin => {
         }
 
         report({
-          type: Error,
-          subType: Error_OnError,
-          error: { msg, url, line, column, ...detail }
-        }).catch((e) => {});
+          type: constant.ERROR,
+          subtype: constant.ERROR_ONERROR,
+          data: { msg, url, line, column, ...detail }
+        });
 
         if (oldOnErrorHandler) {
           return oldOnErrorHandler.apply(this, arguments);
@@ -55,16 +54,17 @@ export const ErrorPlugin = (): Plugin => {
         }
 
         report({
-          type: Error,
-          subType: Error_UnhandledRejection,
-          error: detail
-        }).catch((e) => {});
+          type: constant.ERROR,
+          subtype: constant.ERROR_UNHANDLEDREJECTION,
+          data: detail
+        });
 
         if (oldOnUnhandledRejectionHandler) {
           return oldOnUnhandledRejectionHandler?.apply(this, arguments);
         }
         return true;
       };
-    }
+    },
+    unregister(): void {}
   };
-};
+}

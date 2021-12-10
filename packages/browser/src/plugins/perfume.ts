@@ -1,59 +1,67 @@
-import { Plugin } from "@doras/core";
+import { Plugin, constant } from "@doras/core";
+import { numFixed, isContains } from "@doras/shared";
 import Perfume from "perfume.js";
-import {
-  Performance,
-  Performance_Metric,
-  Performance_Resource
-} from "../types";
 
-export const PerfumePlugin = (conf?: {
+interface Options {
   enable: boolean;
   scriptTiming: boolean;
   xhrTiming: boolean;
-}): Plugin => {
+}
+
+const MetricNameBucket = {};
+
+export function PerfumePlugin(options?: Options): Plugin {
+  const {
+    enable = true,
+    xhrTiming = true,
+    scriptTiming = true
+  } = options || {};
+
   return {
-    name: "@doras/perfume-plugin",
-    setup: ({ report }) => {
-      const isOpenResourceTiming = conf.scriptTiming || conf.xhrTiming || true;
-      if (!conf.enable) return;
+    name: "perfume",
+    register({ report }) {
+      const isOpenResourceTiming = xhrTiming || scriptTiming || true;
+      if (!enable) return;
 
       new Perfume({
         resourceTiming: isOpenResourceTiming,
         analyticsTracker: (options) => {
-          const { metricName, data } = options;
-          bucket[metricName] = data;
+          console.log(options);
 
-          analyticsTool.collectGroup("p1", ["ttfb", "fp", "fcp"], report);
-          analyticsTool.collectGroup("p2", ["fid", "lcp", "cls"], report);
+          const { metricName, data } = options;
+          MetricNameBucket[metricName] = data;
+
+          analyticsTool.collectGroup(["ttfb", "fp", "fcp"], report);
+          analyticsTool.collectGroup(["fid", "lcp", "cls"], report);
 
           if (metricName === "resourceTiming") {
-            if (conf.scriptTiming) {
+            if (scriptTiming) {
               analyticsTool.collectResource("script", data, report);
             }
-            if (conf.xhrTiming) {
+            if (xhrTiming) {
               analyticsTool.collectResource("xmlhttprequest", data, report);
             }
           }
         }
       });
-    }
+    },
+    unregister() {}
   };
-};
+}
 
-const bucket = {};
 const analyticsTool = {
-  collectGroup: (name, keys, report) => {
-    if (isContains(bucket, keys)) {
+  collectGroup: (keys, report) => {
+    if (isContains(MetricNameBucket, keys)) {
       const data = {};
       keys.forEach((k) => {
-        data[k] = trans(bucket[k], 3);
-        delete bucket[k];
+        data[k] = numFixed(MetricNameBucket[k], 3);
+        delete MetricNameBucket[k];
       });
 
       report({
-        type: Performance,
-        subType: Performance_Metric,
-        [Performance]: data
+        type: constant.PERFORMANCE,
+        subtype: constant.PERFORMANCE_METRIC,
+        data: data
       });
     }
   },
@@ -63,22 +71,14 @@ const analyticsTool = {
       const duration = data["duration"];
 
       report({
-        type: Performance,
-        subType: Performance_Resource,
-        [Performance]: {
-          [initiatorType]: { name, duration: trans(duration, 3) }
+        type: constant.RESOURCE,
+        subtype: constant.RESOURCE_TIMING,
+        data: {
+          tag: initiatorType,
+          name,
+          duration: numFixed(duration, 3)
         }
       });
     }
   }
 };
-
-function isContains(bucket, keys: string[]) {
-  const bKeys = Object.keys(bucket);
-  return keys.every((k) => bKeys.includes(k));
-}
-
-function trans(num: any, digit: number): number {
-  if (isNaN(num)) return 0;
-  return +num.toFixed(digit);
-}

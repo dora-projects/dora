@@ -1,11 +1,10 @@
-import { Plugin } from "@doras/core";
+import { Plugin, constant } from "@doras/core";
 import { getSelector } from "@doras/shared";
-import { Resource } from "../types";
 
-export const ResourcePlugin = (conf?): Plugin => {
+export function ResourcePlugin(): Plugin {
   return {
-    name: "@doras/browser-resource-plugin",
-    setup: ({ report }) => {
+    name: "resource",
+    register({ report }) {
       window.addEventListener?.(
         "error",
         function (e) {
@@ -34,15 +33,14 @@ export const ResourcePlugin = (conf?): Plugin => {
             outerHTML
           };
           report({
-            type: Resource,
-            [Resource]: detail
-          }).catch((e) => {});
+            type: constant.RESOURCE,
+            subtype: constant.RESOURCE_ERROR,
+            data: detail
+          });
         },
         true
       );
     },
-    onEventBeforeSend: (event) => {
-      return event;
-    }
+    unregister: () => {}
   };
-};
+}

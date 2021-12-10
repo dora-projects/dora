@@ -1,11 +1,10 @@
-import { Plugin } from "@doras/core";
+import { Plugin, constant } from "@doras/core";
 import { decorator, parseUrl } from "@doras/shared";
-import { Visit, Visit_Entry, Visit_PageView } from "../types";
 
-export const VisitPlugin = (conf?): Plugin => {
+export function VisitPlugin(): Plugin {
   return {
-    name: "@doras/browser-visit-plugin",
-    setup: ({ report, config }) => {
+    name: "visit",
+    register({ report }) {
       let lastHref;
 
       // history
@@ -41,24 +40,21 @@ export const VisitPlugin = (conf?): Plugin => {
       function urlChange(from?: string, to?: string) {
         const formParsed = parseUrl(from);
         const toParsed = parseUrl(to);
-
         lastHref = to;
 
         // 页面没有跳转
         if (formParsed.relative === toParsed.relative) return;
-
         // 入口
         if (!formParsed.path) return;
-
         const visitData = {
           from: formParsed.relative,
           to: toParsed.relative
         };
         report({
-          type: Visit,
-          subType: Visit_PageView,
-          [Visit]: visitData
-        }).catch(() => {});
+          type: constant.VISIT,
+          subtype: constant.VISIT_PAGE_VIEW,
+          data: visitData
+        });
       }
 
       // dom ready 页面加载时统计
@@ -70,11 +66,14 @@ export const VisitPlugin = (conf?): Plugin => {
           to: parsed.relative
         };
         report({
-          type: Visit,
-          subType: Visit_Entry,
-          [Visit]: visitData
-        }).catch(() => {});
+          type: constant.VISIT,
+          subtype: constant.VISIT_ENTRY,
+          data: visitData
+        });
       });
+    },
+    unregister() {
+      return;
     }
   };
-};
+}
