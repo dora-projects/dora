@@ -1,7 +1,7 @@
-export interface DataItem {}
+import { DataItem } from "@doras/types";
 
 export abstract class Store {
-  abstract push(data: DataItem): void;
+  abstract save(data: DataItem): boolean;
   abstract get(): DataItem[];
   abstract remove(): void;
 

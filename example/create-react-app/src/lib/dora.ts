@@ -8,6 +8,4 @@ const dora = new BrowserClient({
   appEnv: "dev",
 });
 
-dora.use(ErrorPlugin())
-
 dora.start();

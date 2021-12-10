@@ -1,9 +1,4 @@
-import { Config } from "@doras/types";
-
-export type PluginRegisterFunc = (args: {
-  report: (e) => void;
-  clientConfig: Config;
-}) => void;
+import { PluginRegisterFunc } from "@doras/types";
 
 export interface Plugin {
   name: string;

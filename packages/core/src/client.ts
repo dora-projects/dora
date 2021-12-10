@@ -8,7 +8,7 @@ export abstract class Client {
   abstract start(): void;
   abstract stop(): void;
   abstract setUser(user: UserInfo): void;
-  abstract setMetadata(key: string, value: string): void;
+  // abstract setMetadata(key: string, value: string): void;
   abstract issue(): void;
   abstract catchError(): void;
 }

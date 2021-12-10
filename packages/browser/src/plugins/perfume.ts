@@ -13,8 +13,8 @@ const MetricNameBucket = {};
 export function PerfumePlugin(options?: Options): Plugin {
   const {
     enable = true,
-    xhrTiming = true,
-    scriptTiming = true
+    xhrTiming = false,
+    scriptTiming = false
   } = options || {};
 
   return {

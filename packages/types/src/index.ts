@@ -15,8 +15,27 @@ export interface Config {
   sampleRate?: number;
   maxBreadcrumbs?: number;
   user?: UserInfo;
-  notify?: (url: string, data: Data) => Promise<any>;
-  beforeSend?: (e: EventLike) => EventLike;
+  // transfer?: any;
+  beforeSend?: beforeSendHook;
+}
+
+export interface DataItem {
+  timestamp: number;
+  event_id: string;
+  content: ReportArgs;
+  request: EventRequest;
+}
+
+export interface TransportOptions {
+  url: string;
+  beforeSend: beforeSendHook;
+}
+
+export type beforeSendHook = (e: BatchEvent) => BatchEvent
+
+export interface BatchEvent {
+  context: ClientContext;
+  values: DataItem[];
 }
 
 export interface EventLike {
@@ -143,15 +162,21 @@ export interface Breadcrumb {
   type: string;
 }
 
-export interface StacktraceFrames {
-  colno: number,
-  lineno: number,
-  filename: string,
-  function: string,
-}
-
 export interface EventRequest {
   referer: string,
   ua: string,
   url: string,
 }
+
+export interface ReportArgs {
+  type: string,
+  subtype?: string,
+  data: any,
+}
+
+export type PluginReport = (e: ReportArgs) => void
+
+export type PluginRegisterFunc = (args: {
+  report: PluginReport;
+  clientConfig: Config;
+}) => void;

@@ -1,8 +1,16 @@
-import { ClientContext } from "@doras/types";
-import { Client, Plugin, PluginRegisterFunc, Store } from "@doras/core";
+import { Client, Plugin, Store, Transport } from "@doras/core";
+import {
+  BatchEvent,
+  ClientContext,
+  DataItem,
+  PluginRegisterFunc,
+  ReportArgs
+} from "@doras/types";
 import { BrowserConfig } from "./config";
 import { BrowserStore } from "./store";
 import * as plugins from "./plugins";
+import { BrowserTransport } from "./transport";
+import { urlIgnoreQuery, uuid } from "@doras/shared";
 
 const pkgName = "__PkgName";
 const pkgVersion = "__PkgVersion";
@@ -15,19 +23,29 @@ export class BrowserClient extends Client {
   private pluginNames: string[];
   private pluginsRegisters: PluginRegisterFunc[];
   private pluginsUnRegisters: (() => void)[];
+  private errors: string[];
+  private transfer: Transport;
 
   constructor(config: BrowserConfig) {
     super();
-    // config
+    // todo verify config
     this.config = config;
 
     this.pluginNames = [];
     this.pluginsRegisters = [];
     this.pluginsUnRegisters = [];
+    this.errors = [];
+
+    this.transfer = new BrowserTransport({
+      url: this.config.serverUrl,
+      beforeSend: this.config.beforeSend
+    });
 
     this.store = new BrowserStore();
+
     const uid = this.store.getAnonymousId();
     const sid = this.store.getSessionId();
+
     this.context = {
       appKey: this.config.appKey,
       release: this.config.appVersion,
@@ -104,21 +122,49 @@ export class BrowserClient extends Client {
     });
   }
 
-  // todo 同类错误上报一次
-  // todo 性能等数据延迟上报
-  private notify(e) {
+  private notify(e: ReportArgs) {
+    const event = {
+      content: e,
+      timestamp: Date.now(),
+      event_id: uuid(),
+      request: {
+        referer: urlIgnoreQuery(window.document.referrer),
+        url: urlIgnoreQuery(window.location.href),
+        ua: window.navigator?.userAgent
+      }
+    };
+
+    // dora ignore same error
+    if (e.data?.agg) {
+      if (this.errors.indexOf(e.data?.agg) > -1) return;
+      this.errors.push(e.data?.agg);
+    }
+
+    this.sendToServer(event);
+
+    // todo 延迟 批量发送
+    // if (event.content.type === constant.ERROR) {
+    // } else {
+    //   this.store.save(event);
+    // }
+  }
+
+  private sendToServer(d: DataItem | DataItem[]) {
+    const val = Array.isArray(d) ? d : [d];
     const ctx = this.context;
-    const event = { context: ctx, data: e };
-    console.log("gotNotify", event.data);
-    this.store.push(event);
+    const sendData: BatchEvent = {
+      context: ctx,
+      values: val
+    };
+    this.transfer.send(sendData).then((res) => {
+      console.log(res);
+    });
   }
 
   setUser(user): void {
     this.context.user.userId = user?.userId;
     console.log(this.context.sessionId);
   }
-
-  setMetadata(key: string, value: string): void {}
 
   issue(): void {}
 

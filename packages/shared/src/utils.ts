@@ -134,7 +134,7 @@ export function timeout(ms) {
 
 export function noop() {}
 
-export function createUUID() {
+export function uuid() {
   // http://www.ietf.org/rfc/rfc4122.txt
   const s = [] as any;
   const hexDigits = "0123456789abcdef";
@@ -144,9 +144,7 @@ export function createUUID() {
   s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
   s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
   s[8] = s[13] = s[18] = s[23] = "-";
-
-  const uuid = s.join("");
-  return uuid;
+  return s.join("");
 }
 
 export function isPrimitive(wat: any): boolean {
@@ -188,4 +186,20 @@ export function numFixed(num: any, digit: number): number {
 export function isContains(obj: Record<string, any>, keys: string[]) {
   const objKeys = Object.keys(obj);
   return keys.every((k) => objKeys.includes(k));
+}
+
+export function safeJsonParse(data: string) {
+  try {
+    return JSON.parse(data);
+  } catch (_) {
+    return null;
+  }
+}
+
+export function urlIgnoreQuery(url: string) {
+  if (url.indexOf("?") > -1) {
+    const newUrl = url.split("?")[0];
+    return newUrl + "?xxx=xxx";
+  }
+  return url;
 }
