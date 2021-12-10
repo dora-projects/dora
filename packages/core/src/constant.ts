@@ -2,7 +2,7 @@ export const API = "api";
 export const API_XHR = "api_xhr";
 
 export const ERROR = "error";
-export const ERROR_ONERROR = "onerror";
+export const ERROR_LISTENER = "error_listener";
 export const ERROR_UNHANDLEDREJECTION = "unhandledrejection";
 export const ERROR_CUSTOM_CATCH = "error_custom_catch";
 

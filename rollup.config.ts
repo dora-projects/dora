@@ -12,6 +12,8 @@ import camelcase from "camelcase";
 
 const { BUILD_TYPE } = process.env;
 
+const printSizePkg = ["@doras/browser"];
+
 function getPackages() {
   // const packages = ["types", "shared", "core"];
   const packages = ["types", "shared", "core", "browser"];
@@ -72,15 +74,12 @@ function configBuilder({ location, pkgJson }) {
       const plugins = [...commonPlugins];
 
       if (compress) {
-        plugins.push(
-          terser({
-            output: {
-              comments: false
-            }
-          }),
-          filesize()
-        );
         file = path.join(location, "dist", "umd.min.js");
+        plugins.push(terser({ output: { comments: false } }));
+      }
+
+      if (printSizePkg.includes(pkgJson.name) && file.indexOf("min.js") > -1) {
+        plugins.push(filesize());
       }
 
       const globalName = camelcase(pkgJson.name);

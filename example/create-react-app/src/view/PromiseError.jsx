@@ -4,10 +4,15 @@ function PromiseError() {
   const handlePromise = () => {
     Promise?.reject(new Error("fail"));
   };
+
+  const handlePrimitive = () => {
+    Promise?.reject("haha");
+  };
   return (
     <div className="section">
       <h1>Promise</h1>
-      <button onClick={() => handlePromise()}>unhandledrejection 按钮</button>
+      <button onClick={() => handlePromise()}>reject new Error 按钮</button>
+      <button onClick={() => handlePrimitive()}>reject string 按钮</button>
     </div>
   );
 }

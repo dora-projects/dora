@@ -2,7 +2,7 @@ import { Plugin, constant } from "@doras/core";
 import { numFixed, isContains } from "@doras/shared";
 import Perfume from "perfume.js";
 
-interface Options {
+export interface Options {
   enable: boolean;
   scriptTiming: boolean;
   xhrTiming: boolean;
@@ -26,8 +26,6 @@ export function PerfumePlugin(options?: Options): Plugin {
       new Perfume({
         resourceTiming: isOpenResourceTiming,
         analyticsTracker: (options) => {
-          console.log(options);
-
           const { metricName, data } = options;
           MetricNameBucket[metricName] = data;
 

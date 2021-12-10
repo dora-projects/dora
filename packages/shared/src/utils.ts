@@ -39,6 +39,27 @@ export function isEmptyObject(obj: any): boolean {
   return Object.keys(obj).length === 0;
 }
 
+export function isError(wat: any): boolean {
+  switch (Object.prototype.toString.call(wat)) {
+    case "[object Error]":
+      return true;
+    case "[object Exception]":
+      return true;
+    case "[object DOMException]":
+      return true;
+    default:
+      return isInstanceOf(wat, Error);
+  }
+}
+
+export function isInstanceOf(wat: any, base: any): boolean {
+  try {
+    return wat instanceof base;
+  } catch (_e) {
+    return false;
+  }
+}
+
 export function getFirst(arr: any[]) {
   if (Array.isArray(arr) && arr.length > 0) {
     return arr[0];

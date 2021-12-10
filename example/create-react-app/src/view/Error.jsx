@@ -2,8 +2,12 @@ import React from "react";
 
 function Error() {
   const handleError = () => {
-    const obj = JSON.parse("");
-    console.log(obj.name.b.c);
+    // const obj = JSON.parse("");
+    // console.log(obj.name.b.c);
+    let a = {
+      b:null
+    }
+    console.log(a.b.c)
   };
   return (
     <div className="section">

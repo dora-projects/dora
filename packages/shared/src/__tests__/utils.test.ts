@@ -1,4 +1,11 @@
-import { isEmptyObject, isString, parseUrl, isPath } from "..";
+import {
+  isEmptyObject,
+  isString,
+  parseUrl,
+  isPath,
+  isContains,
+  numFixed
+} from "..";
 
 it("should isEmptyObject work", function () {
   expect(isEmptyObject(null)).toEqual(true);
@@ -30,4 +37,14 @@ it("should parseUrl work", function () {
     protocol: "https",
     relative: "/dora-platform/dora-sdk-js/blob/master/src/utils/mixin.ts"
   });
+});
+
+it("should isContains work", function () {
+  expect(isContains({ a: 0 }, ["a"])).toEqual(true);
+  expect(isContains({ a: 0 }, ["a", "b"])).toEqual(false);
+});
+
+it("should numFixed work", function () {
+  expect(numFixed(0, 3)).toEqual(0);
+  expect(numFixed(1.2222, 3)).toEqual(1.222);
 });

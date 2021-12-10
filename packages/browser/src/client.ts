@@ -43,24 +43,22 @@ export class BrowserClient extends Client {
   }
 
   use(plugins: Plugin | Plugin[]): void {
-    const usePlugin = (p: Plugin) => {
-      const { name, register, unregister } = p;
-      if (this.pluginNames.indexOf(name) > -1) {
-        console.log(`${name} plugin has been used!`);
-        return;
-      }
-      this.pluginNames.push(name);
-      this.pluginsRegisters.push(register);
-      this.pluginsUnRegisters.push(unregister);
-    };
-
-    if (!Array.isArray(plugins)) {
-      usePlugin(plugins);
+    if (Array.isArray(plugins)) {
+      plugins.forEach((p) => this._usePlugin(p));
     } else {
-      plugins.forEach((p) => {
-        usePlugin(p);
-      });
+      this._usePlugin(plugins);
     }
+  }
+
+  private _usePlugin(p: Plugin) {
+    const { name, register, unregister } = p;
+    if (this.pluginNames.indexOf(name) > -1) {
+      console.log(`${name} plugin has been used!`);
+      return;
+    }
+    this.pluginNames.push(name);
+    this.pluginsRegisters.push(register);
+    this.pluginsUnRegisters.push(unregister);
   }
 
   isActive(): boolean {
@@ -111,7 +109,7 @@ export class BrowserClient extends Client {
   private notify(e) {
     const ctx = this.context;
     const event = { context: ctx, data: e };
-    // console.log("gotNotify", event.data);
+    console.log("gotNotify", event.data);
     this.store.push(event);
   }
 
