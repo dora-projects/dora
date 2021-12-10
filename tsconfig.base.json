@@ -9,6 +9,7 @@
     "strict": false,
     "noUnusedLocals": true,
     "declaration": true,
+    "declarationMap": true,
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -18,5 +19,9 @@
       "esnext",
       "dom"
     ]
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

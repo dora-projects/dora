@@ -29,7 +29,7 @@ function getPackages() {
 function configBuilder({ location, pkgJson }) {
   const tsPlugin = ts({
     check: true,
-    tsconfig: path.resolve(location, "tsconfig.json"),
+    tsconfig: path.resolve(location, "tsconfig.build.json"),
     cacheRoot: path.resolve(__dirname, "node_modules/.rts2_cache"),
     useTsconfigDeclarationDir: true,
     tsconfigOverride: {
@@ -37,8 +37,7 @@ function configBuilder({ location, pkgJson }) {
         sourceMap: true,
         declaration: true,
         declarationMap: true
-      },
-      exclude: ["**/__tests__"]
+      }
     }
   });
 

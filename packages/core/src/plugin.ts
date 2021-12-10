@@ -1,3 +1,5 @@
 export abstract class CorePlugin {
-  init() {}
+  name: string;
+  register: () => void;
+  unregister: () => void;
 }

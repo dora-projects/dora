@@ -1,5 +1,4 @@
 export abstract class CoreConfig {
-  validate() {}
-
-  get() {}
+  validate: () => void;
+  get: () => any;
 }

@@ -1,4 +1,4 @@
-import { BaseConfig } from "@doras/core";
+import { BaseConfig } from "@doras/types";
 
 export const Api = "api";
 export const Api_Xhr = "xhr";

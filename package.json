@@ -11,7 +11,7 @@
     "dev": "cross-env BUILD_TYPE=dev rollup -cw rollup.config.ts",
     "build": "cross-env BUILD_TYPE=prod rollup -c rollup.config.ts",
     "clean": "lerna clean",
-    "b:types": "lerna run b:types",
+    "clean:dist": "lerna run clean",
     "test": "jest",
     "test-cov": "jest --coverage",
     "prepublishOnly": "npm run build",

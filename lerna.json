@@ -1,7 +1,11 @@
 {
-  "npmClient": "yarn",
-  "useWorkspaces": true,
+  "packages": [
+    "examples/*",
+    "packages/*"
+  ],
   "version": "independent",
+  "useWorkspaces": true,
+  "npmClient": "yarn",
   "command": {
     "publish": {
       "ignoreChanges": [

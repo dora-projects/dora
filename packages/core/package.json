@@ -10,7 +10,7 @@
     "access": "public"
   },
   "scripts": {
-    "b:types": "tsc --emitDeclarationOnly"
+    "clean": "rm -rf dist"
   },
   "files": [
     "dist/**/*"

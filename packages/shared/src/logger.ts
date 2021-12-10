@@ -1,6 +1,6 @@
-import { getGlobal } from "./dom";
+// import { getGlobal } from "./dom";
 
-const g = getGlobal();
+// const g = getGlobal();
 const PREFIX = "Dora";
 
 const C = console;
@@ -44,9 +44,11 @@ class Logger {
     E(`${PREFIX}[Error]: ${args.join(" ")}`);
   }
 }
+//
+// g._dora = g._dora || {};
+//
+const logger = new Logger();
 
-g.__DORA__ = g.__DORA__ || {};
-const logger =
-  (g.__DORA__.logger as Logger) || (g.__DORA__.logger = new Logger());
+//   (g.__DORA__.logger as Logger) || (g.__DORA__.logger = new Logger());
 
 export { logger };

@@ -1,13 +1,13 @@
 import { CorePlugin } from "./plugin";
 
 export abstract class CoreApi {
-  name: string;
-  use(plugin: CorePlugin | CorePlugin[]) {}
+  clientName: string;
+  use: (plugin: CorePlugin | CorePlugin[]) => void;
   isActive: () => boolean;
-  start() {}
-  stop() {}
-  setUser() {}
-  setMetadata() {}
-  issue() {}
-  catchError() {}
+  abstract start: () => void;
+  abstract stop: () => void;
+  setUser: () => void;
+  setMetadata: (key: string, value: string) => void;
+  abstract issue: () => void;
+  abstract catchError: () => void;
 }
