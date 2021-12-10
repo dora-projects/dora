@@ -127,18 +127,23 @@ function configBuilder({ location, pkgJson }) {
 
 function getProd() {
   const pkgConfig = getPackages();
-  const module = pkgConfig.map((pkg) => configBuilder(pkg).module());
-  const umdUnCompress = pkgConfig.map((pkg) => configBuilder(pkg).umd(false));
-  const umdCompress = pkgConfig.map((pkg) => configBuilder(pkg).umd(true));
 
-  return [...module, ...umdUnCompress, ...umdCompress];
+  return pkgConfig.reduce((acc, pkg) => {
+    acc.push(configBuilder(pkg).module());
+    acc.push(configBuilder(pkg).umd(false));
+    acc.push(configBuilder(pkg).umd(true));
+    return acc;
+  }, []);
 }
 
 function getDev() {
   const pkgConfig = getPackages();
-  const module = pkgConfig.map((pkg) => configBuilder(pkg).module());
-  const umdUnCompress = pkgConfig.map((pkg) => configBuilder(pkg).umd(false));
-  return [...module, ...umdUnCompress];
+
+  return pkgConfig.reduce((acc, pkg) => {
+    acc.push(configBuilder(pkg).module());
+    acc.push(configBuilder(pkg).umd(false));
+    return acc;
+  }, []);
 }
 
 let promises = [];
