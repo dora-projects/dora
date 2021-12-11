@@ -89,7 +89,7 @@ export function XhrPlugin(): Plugin {
         report({
           type: constant.API,
           subtype: constant.API_XHR,
-          data: errorReason
+          [constant.API]: errorReason
         });
       }
     },

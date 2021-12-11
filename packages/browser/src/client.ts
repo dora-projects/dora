@@ -123,6 +123,13 @@ export class BrowserClient extends Client {
   }
 
   private notify(e: ReportArgs) {
+    // dora ignore same error
+    if (e.agg) {
+      if (this.errors.indexOf(e.agg) > -1) return;
+      this.errors.push(e.agg);
+      delete e.agg;
+    }
+
     const event = {
       content: e,
       timestamp: Date.now(),
@@ -133,12 +140,6 @@ export class BrowserClient extends Client {
         ua: window.navigator?.userAgent
       }
     };
-
-    // dora ignore same error
-    if (e.data?.agg) {
-      if (this.errors.indexOf(e.data?.agg) > -1) return;
-      this.errors.push(e.data?.agg);
-    }
 
     this.sendToServer(event);
 

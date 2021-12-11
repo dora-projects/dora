@@ -59,7 +59,7 @@ const analyticsTool = {
       report({
         type: constant.PERFORMANCE,
         subtype: constant.PERFORMANCE_METRIC,
-        data: data
+        [constant.PERFORMANCE]: data
       });
     }
   },
@@ -71,7 +71,7 @@ const analyticsTool = {
       report({
         type: constant.RESOURCE,
         subtype: constant.RESOURCE_TIMING,
-        data: {
+        [constant.RESOURCE]: {
           tag: initiatorType,
           name,
           duration: numFixed(duration, 3)

@@ -171,7 +171,7 @@ export interface EventRequest {
 export interface ReportArgs {
   type: string,
   subtype?: string,
-  data: any,
+  [key: string]: any;
 }
 
 export type PluginReport = (e: ReportArgs) => void

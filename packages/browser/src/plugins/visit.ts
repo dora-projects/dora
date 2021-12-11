@@ -53,7 +53,7 @@ export function VisitPlugin(): Plugin {
         report({
           type: constant.VISIT,
           subtype: constant.VISIT_PAGE_VIEW,
-          data: visitData
+          [constant.VISIT]: visitData
         });
       }
 
@@ -68,7 +68,7 @@ export function VisitPlugin(): Plugin {
         report({
           type: constant.VISIT,
           subtype: constant.VISIT_ENTRY,
-          data: visitData
+          [constant.VISIT]: visitData
         });
       });
     },

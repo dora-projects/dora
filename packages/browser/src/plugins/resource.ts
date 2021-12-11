@@ -46,6 +46,6 @@ function resErrorHandler(e, report: PluginReport) {
   report({
     type: constant.RESOURCE,
     subtype: constant.RESOURCE_ERROR,
-    data: detail
+    [constant.RESOURCE]: detail
   });
 }

@@ -64,10 +64,10 @@ function onErrorHandler(e, report: PluginReport) {
     report({
       type: constant.ERROR,
       subtype: constant.ERROR_LISTENER,
-      data: {
-        agg: createSummary(JSON.stringify(agg), 300),
-        exception: ex
-      }
+      [constant.ERROR]: {
+        values: ex.values
+      },
+      agg: createSummary(JSON.stringify(agg), 300)
     });
   }
 }
@@ -99,11 +99,11 @@ function unhandledRejectionHandler(e, report: PluginReport) {
     report({
       type: constant.ERROR,
       subtype: constant.ERROR_UNHANDLEDREJECTION,
-      data: {
-        agg: createSummary(JSON.stringify(agg), 300),
-        exception: ex,
+      [constant.ERROR]: {
+        values: ex.values,
         rejection: true
-      }
+      },
+      agg: createSummary(JSON.stringify(agg), 300)
     });
   }
 }

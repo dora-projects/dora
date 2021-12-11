@@ -2,8 +2,8 @@ import { BrowserClient, ErrorPlugin } from "@doras/browser";
 
 const dora = new BrowserClient({
   debug: true,
-  serverUrl: "/collect",
-  appKey: "44992867-5a85-4804-849a-d525be1fa77c",
+  serverUrl: "http://localhost:8000/report",
+  appKey: "636005f05d574ca7b920b2e01c241985",
   appVersion: "0.0.1",
   appEnv: "dev",
 });
