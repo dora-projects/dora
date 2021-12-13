@@ -1,14 +1,6 @@
 import React from "react";
-import { setConfig, remove } from "../lib/config";
-// import { defaultConfig } from "../lib/dora";
-
-const defaultConfig ={
-  serverUrl: "http://127.0.0.1:8221/collect",
-  appId: "44992867-5a85-4804-849a-d525be1fa77c",
-  appVersion: "0.0.1",
-  appEnv: "dev",
-  debug: false
-}
+import { setConfig, remove } from "../lib/store";
+import defaultConfig from "../lib/default";
 
 function Config() {
   return (
@@ -16,19 +8,22 @@ function Config() {
       e.preventDefault();
       const formData = new FormData(e.target);
       const formProps = Object.fromEntries(formData) || {};
-      const { serverUrl, appId, appVersion, appEnv, debug } = formProps;
-      setConfig({ serverUrl, appId, appVersion, appEnv, debug: !!debug });
-      window.location.reload();
+      const { serverUrl, appKey, appVersion, appEnv, debug } = formProps;
+
+      setConfig({ serverUrl, appKey, appVersion, appEnv, debug: !!debug });
+
+      window.location.href = "/"
+
     }}>
-      <div className="section">
+      <div className="section bg-white shadow-md">
         <h1>sdk 配置</h1>
         <div className="form-item">
           <label>serverUrl: </label>
           <input type="text" name="serverUrl" defaultValue={defaultConfig.serverUrl} />
         </div>
         <div className="form-item">
-          <label>appId: </label>
-          <input type="text" name="appId" defaultValue={defaultConfig.appId} />
+          <label>appKey: </label>
+          <input type="text" name="appKey" defaultValue={defaultConfig.appKey} />
         </div>
         <div className="form-item">
           <label>appVersion: </label>
@@ -46,7 +41,7 @@ function Config() {
           <button type="submit">确定</button>
           <button type="button" onClick={() => {
             remove();
-            window.location.reload();
+            window.location.href = "/"
           }}>恢复默认
           </button>
         </div>

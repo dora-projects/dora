@@ -16,9 +16,10 @@ function Stat() {
   };
 
   return (
-    <div className="section">
+    <div className="section bg-white shadow-md">
       <h1>Stat</h1>
       <input
+        className="mb-3.5"
         type="text"
         value={active}
         placeholder="statAction"
@@ -27,6 +28,7 @@ function Stat() {
         }}
       />
       <input
+        className="mb-3.5"
         type="text"
         value={category}
         placeholder="setCategory"
@@ -34,24 +36,9 @@ function Stat() {
           setCategory(v.target.value);
         }}
       />
-      <input
-        type="text"
-        value={label}
-        placeholder="setLabel"
-        onChange={(v) => {
-          setLabel(v.target.value);
-        }}
-      />
-      <input
-        type="text"
-        value={val}
-        placeholder="setValue"
-        onChange={(v) => {
-          setValue(v.target.value);
-        }}
-      />
 
       <button
+        className="block"
         onClick={() => {
           handleStat();
         }}

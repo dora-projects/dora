@@ -16,7 +16,7 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-slate-100">
+    <div className="bg-slate-100 min-h-screen">
       <img src="https://nancode.gitee.io/dora/img/logo.png" alt="" style={{ display: "none" }} />
       <Config />
       <div className="section-groups">

@@ -23,7 +23,7 @@ function Ajax() {
   };
 
   return (
-    <div className="section">
+    <div className="section bg-white shadow-md">
       <h1>ajax</h1>
       <button onClick={() => handleError()}>500按钮</button>
       <button onClick={() => handleTimeOut()}>timeout 按钮</button>

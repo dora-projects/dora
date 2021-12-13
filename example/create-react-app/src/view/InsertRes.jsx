@@ -10,7 +10,7 @@ export default function InsertRes() {
   }
 
   return (
-    <div className="section">
+    <div className="section bg-white shadow-md">
       <h1>InsertRes</h1>
       <button onClick={() => handle()}>插入 script</button>
     </div>

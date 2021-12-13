@@ -2,25 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-
 input {
+    border: 1px solid #ccc;
     padding: 5px;
 }
 
 .config-panel {
     padding: 10px 0;
-    background: #f3f3f3;
 }
 
 .config-panel .section {
-    background: #fff;
-    width: 600px;
+    width: 800px;
 }
 
 .config-panel .form-item {
@@ -28,7 +20,7 @@ input {
 }
 
 .config-panel .form-item input {
-    width: 300px;
+    width: 500px;
 }
 
 .config-panel .form-item.submit {

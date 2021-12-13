@@ -9,7 +9,7 @@ function PromiseError() {
     Promise?.reject("haha");
   };
   return (
-    <div className="section">
+    <div className="section bg-white shadow-md">
       <h1>Promise</h1>
       <button onClick={() => handlePromise()}>reject new Error 按钮</button>
       <button onClick={() => handlePrimitive()}>reject string 按钮</button>

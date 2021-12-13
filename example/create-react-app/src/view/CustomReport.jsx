@@ -1,4 +1,5 @@
 import React from "react";
+
 // import {Browser} from "@doras/browser";
 
 function CustomReport() {
@@ -10,7 +11,7 @@ function CustomReport() {
     }
   };
   return (
-    <div className="section">
+    <div className="section bg-white shadow-md">
       <h1>CustomReport</h1>
       <button onClick={() => handleError()}>undefined 按钮</button>
     </div>

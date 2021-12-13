@@ -9,7 +9,7 @@ function History() {
   };
 
   return (
-    <div className="section">
+    <div className="section bg-white shadow-md">
       <h1>History</h1>
       <button onClick={() => pushState()}>pushState 按钮</button>
       <button onClick={() => replaceState()}>replaceState 按钮</button>

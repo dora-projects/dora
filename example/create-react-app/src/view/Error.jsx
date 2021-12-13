@@ -27,7 +27,7 @@ function Error() {
   };
 
   return (
-    <div className="section">
+    <div className="section bg-white shadow-md">
       <h1>Error</h1>
       <button onClick={() => handleError()}>undefined 按钮</button>
       <button onClick={() => handleRandomError()}>RandomError 按钮</button>
