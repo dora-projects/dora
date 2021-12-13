@@ -1,4 +1,4 @@
-import { Client, Plugin, Store, Transport } from "@doras/core";
+import { Client, Plugin, Store, Transport, constant } from "@doras/core";
 import {
   BatchEvent,
   ClientContext,
@@ -6,7 +6,7 @@ import {
   PluginRegisterFunc,
   ReportArgs
 } from "@doras/types";
-import { BrowserConfig } from "./config";
+import { BrowserConfig, verifyConfig } from "./config";
 import { BrowserStore } from "./store";
 import * as plugins from "./plugins";
 import { BrowserTransport } from "./transport";
@@ -14,6 +14,14 @@ import { urlIgnoreQuery, uuid } from "@doras/shared";
 
 const pkgName = "__PkgName";
 const pkgVersion = "__PkgVersion";
+
+const defaultPlugins = [
+  plugins.ErrorPlugin(),
+  plugins.PerfumePlugin(),
+  plugins.ResourcePlugin(),
+  plugins.XhrPlugin(),
+  plugins.VisitPlugin()
+];
 
 export class BrowserClient extends Client {
   private readonly config: BrowserConfig = null;
@@ -26,10 +34,12 @@ export class BrowserClient extends Client {
   private errors: string[];
   private transfer: Transport;
 
-  constructor(config: BrowserConfig) {
+  constructor(options: BrowserConfig) {
     super();
-    // todo verify config
-    this.config = config;
+
+    const { conf, pass } = verifyConfig(options);
+    if (!pass) return;
+    this.config = conf;
 
     this.pluginNames = [];
     this.pluginsRegisters = [];
@@ -83,20 +93,22 @@ export class BrowserClient extends Client {
     return this.active;
   }
 
+  isReady(): boolean {
+    return !!this.config;
+  }
+
   start(): void {
-    if (this.active) {
+    if (this.isActive()) {
       console.log("dora has started!");
       return;
     }
 
-    if (this.pluginsRegisters.length <= 0) {
-      const defaultPlugins = [
-        plugins.ErrorPlugin(),
-        plugins.PerfumePlugin(),
-        plugins.ResourcePlugin(),
-        plugins.XhrPlugin(),
-        plugins.VisitPlugin()
-      ];
+    if (!this.isReady()) {
+      console.log("please check config!");
+      return;
+    }
+
+    if (this.config.useDefaultPlugins) {
       this.use(defaultPlugins);
     }
 
@@ -123,6 +135,11 @@ export class BrowserClient extends Client {
   }
 
   private notify(e: ReportArgs) {
+    if (!this.isActive()) {
+      console.log("need run dora.start()");
+      return;
+    }
+
     // dora ignore same error
     if (e.agg) {
       if (this.errors.indexOf(e.agg) > -1) return;
@@ -167,7 +184,34 @@ export class BrowserClient extends Client {
     console.log(this.context.sessionId);
   }
 
-  issue(): void {}
+  stat(category: string, label: string, value: string | number): void {
+    // todo
+    this.notify({
+      type: constant.STAT,
+      category: category,
+      stat: {
+        label,
+        value
+      }
+    });
+  }
 
-  catchError(): void {}
+  issue(title: string, content: string, contact: string): void {
+    //todo
+    this.notify({
+      type: constant.ERROR,
+      category: constant.ERROR_ISSUE,
+      error: {
+        issue: { title, content, contact }
+      }
+    });
+  }
+
+  catchError(e): void {
+    this.notify({
+      type: constant.ERROR,
+      category: constant.ERROR_CUSTOM_CATCH,
+      stat: {}
+    });
+  }
 }

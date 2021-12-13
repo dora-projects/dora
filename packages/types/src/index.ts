@@ -12,6 +12,7 @@ export interface Config {
   appVersion: string;
 
   debug?: boolean;
+  useDefaultPlugins?: boolean;
   sampleRate?: number;
   maxBreadcrumbs?: number;
   user?: UserInfo;
