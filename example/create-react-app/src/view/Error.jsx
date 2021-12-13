@@ -1,5 +1,4 @@
 import React from "react";
-import { throws } from "assert";
 
 function RandomID(length) {
   let result = "";

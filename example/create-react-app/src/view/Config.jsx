@@ -1,5 +1,5 @@
 import React from "react";
-import { setConfig, remove } from "../config";
+import { setConfig, remove } from "../lib/config";
 // import { defaultConfig } from "../lib/dora";
 
 const defaultConfig ={

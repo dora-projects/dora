@@ -16,7 +16,8 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div className="bg-slate-100">
+      <img src="https://nancode.gitee.io/dora/img/logo.png" alt="" style={{ display: "none" }} />
       <Config />
       <div className="section-groups">
         <Error />
@@ -28,7 +29,7 @@ function App() {
         <PromiseError />
         <Stat />
       </div>
-    </>
+    </div>
   );
 }
 

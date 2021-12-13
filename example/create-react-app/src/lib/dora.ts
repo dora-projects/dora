@@ -1,4 +1,4 @@
-import { BrowserClient, ErrorPlugin } from "@doras/browser";
+import { BrowserClient } from "@doras/browser";
 
 const dora = new BrowserClient({
   debug: true,
@@ -6,6 +6,10 @@ const dora = new BrowserClient({
   appKey: "636005f05d574ca7b920b2e01c241985",
   appVersion: "0.0.1",
   appEnv: "dev",
+  beforeSend(e){
+    console.log(JSON.stringify(e,null,2))
+    return e
+  }
 });
 
 dora.start();
