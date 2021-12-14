@@ -7,9 +7,10 @@
   ],
   "scripts": {
     "bootstrap": "yarn",
-    "demo": "yarn workspace create-react-app run start",
     "dev": "cross-env BUILD_TYPE=dev rollup -cw rollup.config.ts",
     "build": "cross-env BUILD_TYPE=prod rollup -c rollup.config.ts",
+    "dev:demo": "yarn workspace create-react-app run start",
+    "build:demo": "yarn workspace create-react-app run build",
     "clean": "lerna clean",
     "clean:dist": "lerna run clean",
     "test": "jest",
