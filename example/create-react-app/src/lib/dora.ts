@@ -1,5 +1,5 @@
 import { BrowserClient } from "@doras/browser";
-import config from "../lib/default"
+import config from "../lib/default";
 
 const dora = new BrowserClient({
   // debug: true,
@@ -8,10 +8,12 @@ const dora = new BrowserClient({
   // appVersion: "0.0.1",
   // appEnv: "dev",
   ...config,
-  beforeSend(e){
-    console.log(JSON.stringify(e,null,2))
-    return e
+  beforeSend(e) {
+    console.log(JSON.stringify(e, null, 2));
+    return e;
   }
 });
 
 dora.start();
+
+export default dora;

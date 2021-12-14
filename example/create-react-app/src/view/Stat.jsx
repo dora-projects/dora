@@ -1,18 +1,18 @@
 import React from "react";
+import dora from "../lib/dora";
+
 
 function Stat() {
-  const [active, setActive] = React.useState("click");
-  const [category, setCategory] = React.useState("activity");
-  const [label, setLabel] = React.useState("banner");
-  const [val, setValue] = React.useState(11);
+  const [ category, setCategory ] = React.useState("click");
+  const [ label, setLabel ] = React.useState("price");
+  const [ number, setNumber ] = React.useState(10);
 
   const handleStat = () => {
-    // Browser.stat({
-    //   action: active,
-    //   category: category,
-    //   label: label,
-    //   value: val
-    // });
+    dora.stat({
+      category: category,
+      label: label,
+      numberValue: number
+    });
   };
 
   return (
@@ -21,22 +21,30 @@ function Stat() {
       <input
         className="mb-3.5"
         type="text"
-        value={active}
-        placeholder="statAction"
+        value={category}
+        placeholder="category"
         onChange={(v) => {
-          setActive(v.target.value);
+          setCategory(v.target.value);
         }}
       />
       <input
         className="mb-3.5"
         type="text"
-        value={category}
-        placeholder="setCategory"
+        value={label}
+        placeholder="label"
         onChange={(v) => {
-          setCategory(v.target.value);
+          setLabel(v.target.value);
         }}
       />
-
+      <input
+        className="mb-3.5"
+        type="number"
+        value={number}
+        placeholder="numberValue"
+        onChange={(v) => {
+          setNumber(v.target.value);
+        }}
+      />
       <button
         className="block"
         onClick={() => {
