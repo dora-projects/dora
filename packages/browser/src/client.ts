@@ -29,6 +29,7 @@ import {
 import { BrowserStore } from "./store";
 import * as plugins from "./plugins";
 import { BrowserTransport } from "./transport";
+import { Breadcrumb } from "@doras/core/src/breadcrumb";
 
 const pkgName = "__PkgName";
 const pkgVersion = "__PkgVersion";
@@ -49,6 +50,7 @@ export class BrowserClient extends Client {
   private pluginNames: string[];
   private pluginsRegisters: PluginRegisterFunc[];
   private pluginsUnRegisters: (() => void)[];
+  private readonly breadcrumb: Breadcrumb;
   private errors: string[];
   private transfer: Transport;
 
@@ -66,6 +68,10 @@ export class BrowserClient extends Client {
     this.pluginNames = [];
     this.pluginsRegisters = [];
     this.pluginsUnRegisters = [];
+    this.breadcrumb = new Breadcrumb({
+      maxBreadcrumbs: this.config.maxBreadcrumbs,
+      beforeBreadcrumb: this.config.beforeBreadcrumb
+    });
     this.errors = [];
 
     this.transfer = new BrowserTransport({
@@ -146,7 +152,11 @@ export class BrowserClient extends Client {
 
   private _installPlugin() {
     this.pluginsRegisters.map((item) => {
-      item({ report: this.notify.bind(this), clientConfig: this.config });
+      item({
+        report: this.notify.bind(this),
+        breadcrumb: this.breadcrumb,
+        clientConfig: this.config
+      });
     });
   }
 
@@ -169,7 +179,7 @@ export class BrowserClient extends Client {
       delete e.agg;
     }
 
-    const event = {
+    const event: DataItem = {
       content: e,
       timestamp: Date.now(),
       event_id: uuid(),
@@ -179,6 +189,10 @@ export class BrowserClient extends Client {
         ua: window.navigator?.userAgent
       }
     };
+
+    if (e.type === constant.ERROR) {
+      event.breadcrumbs = this.breadcrumb.getItems();
+    }
 
     this.sendToServer(event);
 
@@ -218,7 +232,7 @@ export class BrowserClient extends Client {
         category,
         label,
         stringValue,
-        numberValue
+        numberValue: Number(numberValue)
       }
     });
   }

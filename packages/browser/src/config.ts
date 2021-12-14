@@ -14,7 +14,8 @@ import {
   isObject,
   isNumber,
   logger,
-  isPrimitive
+  isPrimitive,
+  isFunction
 } from "@doras/shared";
 import { verify } from "@doras/shared/src/verify";
 
@@ -54,6 +55,14 @@ export const configSchema: Schema = {
   user: {
     message: "should be an object",
     validate: (value) => isEmpty(value) || isObject(value)
+  },
+  beforeBreadcrumb: {
+    message: "should be an function",
+    validate: (value) => isEmpty(value) || isFunction(value)
+  },
+  beforeSend: {
+    message: "should be an function",
+    validate: (value) => isEmpty(value) || isFunction(value)
   }
 };
 
@@ -113,11 +122,11 @@ const issueSchema = {
   },
   detail: {
     message: "should be a string",
-    validate: (value) => !isEmpty(value) && isString(value)
+    validate: (value) => isEmpty(value) || isString(value)
   },
   contact: {
     message: "should be a string",
-    validate: (value) => !isEmpty(value) && isString(value)
+    validate: (value) => isEmpty(value) || isString(value)
   }
 };
 

@@ -2,6 +2,8 @@ import { Plugin, constant } from "@doras/core";
 import { decorator } from "@doras/shared";
 import { ApiField } from "@doras/types";
 
+let _originXhr = null;
+
 export function XhrPlugin(): Plugin {
   return {
     name: "xhr",
@@ -10,6 +12,7 @@ export function XhrPlugin(): Plugin {
         return;
       }
 
+      _originXhr = window.XMLHttpRequest;
       const xhrProto = XMLHttpRequest.prototype;
 
       decorator(xhrProto, "open", replaceOpen);
@@ -31,8 +34,8 @@ export function XhrPlugin(): Plugin {
             xhr.__dora_own_request__ = true;
           }
 
-          function xhrErrHandler(t): void {
-            xhr.__dora__.type = t;
+          function xhrErrHandler(reason): void {
+            xhr.__dora__.reason = reason;
             if (xhr.__dora_own_request__) return;
             reportApiError(xhr);
           }
@@ -67,17 +70,10 @@ export function XhrPlugin(): Plugin {
       }
 
       function reportApiError(xhr) {
-        const {
-          type = "serverError",
-          url,
-          method,
-          status,
-          bodyData,
-          timeout
-        } = xhr.__dora__;
+        const { reason, url, method, status, bodyData, timeout } = xhr.__dora__;
 
         const errorReason: ApiField = {
-          type,
+          reason,
           url,
           method,
           timeout,
@@ -93,6 +89,8 @@ export function XhrPlugin(): Plugin {
         });
       }
     },
-    unregister() {}
+    unregister() {
+      window.XMLHttpRequest = _originXhr;
+    }
   };
 }

@@ -15,7 +15,7 @@ let _originOnUnhandledRejectionHandler = null;
 export function ErrorPlugin(): Plugin {
   return {
     name: "error",
-    register: ({ report }) => {
+    register: ({ report, breadcrumb }) => {
       // onerror
       _originOnErrorHandler = window.onerror;
       window.onerror = function (

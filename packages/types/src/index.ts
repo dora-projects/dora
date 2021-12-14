@@ -17,6 +17,7 @@ export interface ClientConfig {
   maxBreadcrumbs?: number;
   user?: UserInfo;
   // transfer?: any;
+  beforeBreadcrumb?: beforeBreadcrumbHook;
   beforeSend?: beforeSendHook;
 }
 
@@ -25,6 +26,7 @@ export interface DataItem {
   event_id: string;
   content: ReportArgs;
   request: EventRequest;
+  breadcrumbs?: BreadcrumbItem[];
 }
 
 export interface TransportOptions {
@@ -32,6 +34,7 @@ export interface TransportOptions {
   beforeSend: beforeSendHook;
 }
 
+export type beforeBreadcrumbHook = (b: BreadcrumbItem) => BreadcrumbItem;
 export type beforeSendHook = (e: BatchEvent) => BatchEvent;
 
 export interface BatchEvent {
@@ -74,7 +77,7 @@ export interface PerfField {
 
 // 网络
 export interface ApiField {
-  type: "server_error" | "timeout" | "error";
+  reason: string;
   url: string;
   method: string;
   status: string;
@@ -151,13 +154,23 @@ export interface ClientContext {
   user?: UserInfo;
 }
 
-export interface Breadcrumb {
-  id: string;
+export interface BreadcrumbApi {
+  add(b: BreadcrumbItem): void;
+
+  getItems(): BreadcrumbItem[];
+}
+
+export interface BreadcrumbOpts {
+  maxBreadcrumbs: number;
+  beforeBreadcrumb: beforeBreadcrumbHook;
+}
+
+export interface BreadcrumbItem {
   category: string;
-  data: any;
   message: string;
-  timestamp: string;
-  type: string;
+  data?: string;
+  type?: string;
+  timestamp?: number;
 }
 
 export interface EventRequest {
@@ -176,14 +189,14 @@ export interface ReportArgs {
 export interface StatArgs {
   category: string;
   label: string;
-  stringValue: string;
-  numberValue: string;
+  stringValue?: string;
+  numberValue?: string;
 }
 
 export interface IssueArgs {
   message: string;
-  detail: string;
-  contact: string;
+  detail?: string;
+  contact?: string;
 }
 
 export type PluginReport = (e: ReportArgs) => void;
@@ -191,6 +204,7 @@ export type PluginReport = (e: ReportArgs) => void;
 export type PluginRegisterFunc = (args: {
   report: PluginReport;
   clientConfig: ClientConfig;
+  breadcrumb: BreadcrumbApi;
 }) => void;
 
 export interface Schema {
