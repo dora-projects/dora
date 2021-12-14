@@ -2,11 +2,11 @@ export function isEmpty(value: any): boolean {
   return value === undefined || value === null || value === "";
 }
 
-export function isUrl(value: any): boolean {
+export function isUrl(value: any): value is string {
   return /^http(s)*.+/.test(value);
 }
 
-export function isPath(value: any): boolean {
+export function isPath(value: any): value is string {
   return /^\/.*/.test(value);
 }
 
@@ -19,7 +19,7 @@ export function isBoolean(value: any): value is boolean {
 }
 
 export function isNumber(value: any): value is number {
-  return typeof value === "number" && parseInt("" + value, 10) === value;
+  return typeof value === "number" || !isNaN(+value);
 }
 
 export function isFunction(value: any): value is Function {
@@ -34,7 +34,7 @@ export function isPromise(value: any): value is Promise<any> {
   return value instanceof Promise;
 }
 
-export function isEmptyObject(obj: any): boolean {
+export function isEmptyObject(obj: any): obj is Object {
   if (!obj) return true;
   return Object.keys(obj).length === 0;
 }

@@ -4,7 +4,8 @@ import {
   parseUrl,
   isPath,
   isContains,
-  numFixed
+  numFixed,
+  isNumber
 } from "..";
 
 it("should isEmptyObject work", function () {
@@ -47,4 +48,9 @@ it("should isContains work", function () {
 it("should numFixed work", function () {
   expect(numFixed(0, 3)).toEqual(0);
   expect(numFixed(1.2222, 3)).toEqual(1.222);
+});
+
+it("should isNumber work", function () {
+  expect(isNumber(2)).toEqual(true);
+  expect(isNumber("2.2")).toEqual(true);
 });

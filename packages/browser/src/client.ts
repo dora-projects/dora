@@ -1,4 +1,4 @@
-import { Client, Plugin, Store, Transport, constant } from "@doras/core";
+import { Client, constant, Plugin, Store, Transport } from "@doras/core";
 import {
   BatchEvent,
   ClientContext,
@@ -6,11 +6,29 @@ import {
   PluginRegisterFunc,
   ReportArgs
 } from "@doras/types";
-import { BrowserConfig, verifyConfig } from "./config";
+import {
+  computeStackTrace,
+  createSummary,
+  exceptionFromCustomCatchPrimitive,
+  exceptionFromStacktrace,
+  isError,
+  isPrimitive,
+  Level,
+  logger,
+  urlIgnoreQuery,
+  uuid
+} from "@doras/shared";
+import {
+  BrowserOptions,
+  verifyCatchError,
+  verifyIssue,
+  verifyOptions,
+  verifySetUser,
+  verifyStat
+} from "./config";
 import { BrowserStore } from "./store";
 import * as plugins from "./plugins";
 import { BrowserTransport } from "./transport";
-import { urlIgnoreQuery, uuid } from "@doras/shared";
 
 const pkgName = "__PkgName";
 const pkgVersion = "__PkgVersion";
@@ -24,7 +42,7 @@ const defaultPlugins = [
 ];
 
 export class BrowserClient extends Client {
-  private readonly config: BrowserConfig = null;
+  private readonly config: BrowserOptions = null;
   private active: boolean = false;
   private store: Store;
   private readonly context: ClientContext = null;
@@ -34,12 +52,16 @@ export class BrowserClient extends Client {
   private errors: string[];
   private transfer: Transport;
 
-  constructor(options: BrowserConfig) {
+  constructor(options: BrowserOptions) {
     super();
 
-    const { conf, pass } = verifyConfig(options);
+    const { conf, pass } = verifyOptions(options);
     if (!pass) return;
     this.config = conf;
+
+    if (this.config.debug) {
+      logger.setLevel(Level.DEBUG);
+    }
 
     this.pluginNames = [];
     this.pluginsRegisters = [];
@@ -81,7 +103,7 @@ export class BrowserClient extends Client {
   private _usePlugin(p: Plugin) {
     const { name, register, unregister } = p;
     if (this.pluginNames.indexOf(name) > -1) {
-      console.log(`${name} plugin has been used!`);
+      logger.warn(`${name} plugin has been used!`);
       return;
     }
     this.pluginNames.push(name);
@@ -99,12 +121,12 @@ export class BrowserClient extends Client {
 
   start(): void {
     if (this.isActive()) {
-      console.log("dora has started!");
+      logger.debug("dora has started!");
       return;
     }
 
     if (!this.isReady()) {
-      console.log("please check config!");
+      logger.debug("please check config!");
       return;
     }
 
@@ -114,7 +136,7 @@ export class BrowserClient extends Client {
 
     this._installPlugin();
     this.active = true;
-    console.log(`${pkgName} start... (version: v${pkgVersion})`);
+    logger.debug(`${pkgName} start... (version: v${pkgVersion})`);
   }
 
   stop(): void {
@@ -136,7 +158,7 @@ export class BrowserClient extends Client {
 
   private notify(e: ReportArgs) {
     if (!this.isActive()) {
-      console.log("need run dora.start()");
+      logger.debug("need run dora.start()");
       return;
     }
 
@@ -174,33 +196,41 @@ export class BrowserClient extends Client {
       context: ctx,
       values: val
     };
-    this.transfer.send(sendData).then((res) => {
-      console.log(res);
-    });
+    this.transfer.send(sendData).then((res) => {});
   }
 
   setUser(user): void {
-    this.context.user.userId = user?.userId;
-    console.log(this.context.sessionId);
+    const { pass } = verifySetUser(user);
+    if (!pass) return;
+
+    this.context.user = user;
   }
 
-  stat(category: string, label: string, value: string | number): void {
-    // todo
+  stat(args): void {
+    const { pass } = verifyStat(args);
+    if (!pass) return;
+
+    const { category, label, stringValue, numberValue } = args;
     this.notify({
       type: constant.STAT,
-      category: category,
+      subtype: constant.STAT_KV,
       stat: {
+        category,
         label,
-        value
+        stringValue,
+        numberValue
       }
     });
   }
 
-  issue(title: string, content: string, contact: string): void {
-    //todo
+  issue(args): void {
+    const { pass } = verifyIssue(args);
+    if (!pass) return;
+
+    const { title, content, contact } = args;
     this.notify({
       type: constant.ERROR,
-      category: constant.ERROR_ISSUE,
+      subtype: constant.ERROR_ISSUE,
       error: {
         issue: { title, content, contact }
       }
@@ -208,10 +238,27 @@ export class BrowserClient extends Client {
   }
 
   catchError(e): void {
+    const { pass } = verifyCatchError(e);
+    if (!pass) return;
+
+    let ex = null;
+    if (isPrimitive(e)) {
+      ex = exceptionFromCustomCatchPrimitive(e);
+    } else if (isError(e)) {
+      const stacktrace = computeStackTrace(e);
+      ex = exceptionFromStacktrace(stacktrace);
+    }
+    if (!ex) return;
+
+    const agg = { message: e?.message, stack: e?.stack };
+
     this.notify({
       type: constant.ERROR,
       category: constant.ERROR_CUSTOM_CATCH,
-      stat: {}
+      error: {
+        values: ex.values
+      },
+      agg: createSummary(JSON.stringify(agg), 300)
     });
   }
 }

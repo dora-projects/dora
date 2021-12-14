@@ -1,5 +1,5 @@
 import { Plugin } from "./plugin";
-import { UserInfo } from "@doras/types";
+import { ErrorLike, IssueArgs, StatArgs, UserInfo } from "@doras/types";
 
 export abstract class Client {
   clientName: string;
@@ -16,9 +16,9 @@ export abstract class Client {
 
   // abstract setMetadata(key: string, value: string): void;
 
-  abstract stat(category: string, label: string, value: string | number): void;
+  abstract stat(args: StatArgs): void;
 
-  abstract issue(message: string, content: string, contact: string): void;
+  abstract issue(args: IssueArgs): void;
 
-  abstract catchError(e: any): void;
+  abstract catchError(e: ErrorLike): void;
 }

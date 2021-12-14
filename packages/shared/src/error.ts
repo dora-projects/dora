@@ -35,3 +35,16 @@ export const exceptionFromRejectionWithPrimitive = (reason): Exception => {
     ]
   };
 };
+
+export const exceptionFromCustomCatchPrimitive = (reason): Exception => {
+  return {
+    values: [
+      {
+        type: "CustomCatch",
+        // String() is needed because the Primitive type includes symbols (which can't be automatically stringified)
+        value: `catch error with value: ${String(reason)}`,
+        stacktrace: null
+      }
+    ]
+  };
+};

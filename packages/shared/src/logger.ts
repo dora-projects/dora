@@ -1,18 +1,27 @@
-// import { getGlobal } from "./dom";
-
-// const g = getGlobal();
 const PREFIX = "Dora";
 
 const C = console;
-const L = C.log;
-const W = C.warn || L;
-const E = C.error || L;
+const log = C.log;
+const warn = C.warn || log;
+const error = C.error || log;
+
+export enum Level {
+  DEBUG,
+  WARN,
+  ERROR
+}
 
 class Logger {
+  private _level: Level;
   private _enabled: boolean;
 
   public constructor() {
+    this._level = Level.WARN;
     this._enabled = true;
+  }
+
+  public setLevel(l: Level): void {
+    this._level = l;
   }
 
   public disable(): void {
@@ -24,31 +33,27 @@ class Logger {
   }
 
   public debug(...args: any[]): void {
-    if (!this._enabled) {
-      return;
+    if (!this._enabled) return;
+    if (this._level >= Level.DEBUG) {
+      log(`[${PREFIX}] ${args.join(" ")}`);
     }
-    L(`${PREFIX}[Debug]: ${args.join(" ")}`);
   }
 
   public warn(...args: any[]): void {
-    if (!this._enabled) {
-      return;
+    if (!this._enabled) return;
+    if (this._level >= Level.WARN) {
+      warn(`[${PREFIX}] ${args.join(" ")}`);
     }
-    W(`${PREFIX}[Warn]: ${args.join(" ")}`);
   }
 
   public error(...args: any[]): void {
-    if (!this._enabled) {
-      return;
+    if (!this._enabled) return;
+    if (this._level >= Level.ERROR) {
+      error(`[${PREFIX}] ${args.join(" ")}`);
     }
-    E(`${PREFIX}[Error]: ${args.join(" ")}`);
   }
 }
-//
-// g._dora = g._dora || {};
-//
-const logger = new Logger();
 
-//   (g.__DORA__.logger as Logger) || (g.__DORA__.logger = new Logger());
+const logger = new Logger();
 
 export { logger };

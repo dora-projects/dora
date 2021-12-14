@@ -19,3 +19,4 @@ export const VISIT_PAGE_VIEW = "visit_pv";
 export const VISIT_ENTRY = "visit_entry";
 
 export const STAT = "stat";
+export const STAT_KV = "stat_kv";

@@ -4,7 +4,7 @@ export interface Data {
   [key: string]: any;
 }
 
-export interface Config {
+export interface ClientConfig {
   serverUrl: string;
 
   appKey: string;
@@ -32,7 +32,7 @@ export interface TransportOptions {
   beforeSend: beforeSendHook;
 }
 
-export type beforeSendHook = (e: BatchEvent) => BatchEvent
+export type beforeSendHook = (e: BatchEvent) => BatchEvent;
 
 export interface BatchEvent {
   context: ClientContext;
@@ -40,7 +40,7 @@ export interface BatchEvent {
 }
 
 export interface EventLike {
-  type: "api"|"error"|"res"|"visit"|"perf"|"stat";
+  type: "api" | "error" | "res" | "visit" | "perf" | "stat";
 
   [key: string]: any;
 }
@@ -69,12 +69,12 @@ export interface UserField {
 
 // 性能
 export interface PerfField {
-  perfGroupName: "navigation_timing"|"data_consumption"|"agg_metric";
+  perfGroupName: "navigation_timing" | "data_consumption" | "agg_metric";
 }
 
 // 网络
 export interface ApiField {
-  type: "server_error"|"timeout"|"error";
+  type: "server_error" | "timeout" | "error";
   url: string;
   method: string;
   status: string;
@@ -106,7 +106,7 @@ export interface SimpleStat {
 }
 
 // pv uv 统计
-export type PageEvent = EventLike&PageField&DeviceField&UserField;
+export type PageEvent = EventLike & PageField & DeviceField & UserField;
 
 // error
 export interface ErrorLike {
@@ -115,29 +115,26 @@ export interface ErrorLike {
 }
 
 // Api 错误
-export type ApiEvent = EventLike&
-  PageField&
-  DeviceField&
-  UserField&
+export type ApiEvent = EventLike &
+  PageField &
+  DeviceField &
+  UserField &
   ApiField;
 
 // 代码错误
-export type ErrorEvent = EventLike&
-  PageField&
-  DeviceField&
-  UserField&
+export type ErrorEvent = EventLike &
+  PageField &
+  DeviceField &
+  UserField &
   ErrorField;
 
 // 性能
-export type PerfEvent = EventLike&PageField&DeviceField&PerfField;
+export type PerfEvent = EventLike & PageField & DeviceField & PerfField;
 
 // 打点
-export type StatEvent = EventLike&PageField&StatField&UserField;
+export type StatEvent = EventLike & PageField & StatField & UserField;
 
 export interface UserInfo {
-  userId: string|number|null;
-  userName: string|null;
-
   [key: string]: any;
 }
 
@@ -164,20 +161,41 @@ export interface Breadcrumb {
 }
 
 export interface EventRequest {
-  referer: string,
-  ua: string,
-  url: string,
+  referer: string;
+  ua: string;
+  url: string;
 }
 
 export interface ReportArgs {
-  type: string,
-  subtype?: string,
+  type: string;
+  subtype?: string;
+
   [key: string]: any;
 }
 
-export type PluginReport = (e: ReportArgs) => void
+export interface StatArgs {
+  category: string;
+  label: string;
+  stringValue: string;
+  numberValue: string;
+}
+
+export interface IssueArgs {
+  message: string;
+  detail: string;
+  contact: string;
+}
+
+export type PluginReport = (e: ReportArgs) => void;
 
 export type PluginRegisterFunc = (args: {
   report: PluginReport;
-  clientConfig: Config;
+  clientConfig: ClientConfig;
 }) => void;
+
+export interface Schema {
+  [key: string]: {
+    message: string;
+    validate: (v) => boolean;
+  };
+}
