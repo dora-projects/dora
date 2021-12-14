@@ -17,8 +17,8 @@
     "dist/**/*"
   ],
   "dependencies": {
-    "@doras/core": "*",
-    "@doras/shared": "*",
+    "@doras/core": "0.3.1",
+    "@doras/shared": "0.3.1",
     "perfume.js": "^6.2.0"
   },
   "repository": {

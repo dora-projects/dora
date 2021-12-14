@@ -16,7 +16,7 @@
     "dist/**/*"
   ],
   "dependencies": {
-    "@doras/shared": "*"
+    "@doras/shared": "0.3.1"
   },
   "repository": {
     "type": "git",
