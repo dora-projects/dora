@@ -29,7 +29,7 @@ import {
 import { BrowserStore } from "./store";
 import * as plugins from "./plugins";
 import { BrowserTransport } from "./transport";
-import { Breadcrumb } from "@doras/core/src/breadcrumb";
+import { Breadcrumb } from "@doras/core";
 
 const pkgName = "__PkgName";
 const pkgVersion = "__PkgVersion";
