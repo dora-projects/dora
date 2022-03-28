@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "bootstrap": "yarn",
-    "dev": "cross-env BUILD_TYPE=dev rollup -cw rollup.config.ts",
+    "dev": "cross-env BUILD_TYPE=dev rollup -w -c rollup.config.ts",
     "build": "cross-env BUILD_TYPE=prod rollup -c rollup.config.ts",
     "dev:demo": "yarn workspace create-react-app run start",
     "build:demo": "yarn workspace create-react-app run build",
